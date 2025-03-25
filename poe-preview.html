@@ -1,0 +1,2118 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qingye - Urban Hiking &amp; Social Adventure</title>
+    <style>
+        :root {
+            --primary: #07C160;
+            --primary-dark: #06ad54;
+            --primary-light: #e8f7ef;
+            --secondary: #1677FF;
+            --secondary-dark: #0e5ecc;
+            --accent: #FF8C00;
+            --light: #F5F5F5;
+            --dark: #333333;
+            --gray: #9E9E9E;
+            --light-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+        }
+        
+        body {
+            background-color: #f6f6f6;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+        
+        /* Tab bar styling (WeChat Mini Program style) */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: var(--white);
+            display: flex;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+        
+        .tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        .tab-label {
+            font-size: 10px;
+        }
+        
+        /* App header (WeChat Mini Program style) */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 44px;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            z-index: 990;
+        }
+        
+        .header-title {
+            font-size: 17px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        /* App container */
+        .app-container {
+            margin: 44px 0 60px;
+            height: calc(100vh - 104px);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Page styles */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #f6f6f6;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Map page */
+        .map-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: #f2f6e9;
+        }
+        
+        .map-background {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: radial-gradient(circle at center, #e8f5e9, #c8e6c9);
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        
+        .control-bar {
+            height: 40px;
+            background-color: var(--white);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+            padding: 0 15px;
+            pointer-events: auto;
+        }
+        
+        .map-chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            height: 100%;
+            font-size: 14px;
+            background: transparent;
+        }
+        
+        .send-button {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .tool-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+        
+        .tool-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .location-button {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .map-users {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .map-user {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--white);
+            font-weight: bold;
+            pointer-events: auto;
+        }
+        
+        .map-user.current {
+            background-color: var(--primary);
+            color: var(--white);
+            animation: pulse 2s infinite;
+        }
+        
+        .map-user.friend {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .map-user.group {
+            background-color: var(--accent);
+            color: var(--white);
+        }
+        
+        .chat-bubble {
+            position: absolute;
+            max-width: 200px;
+            min-width: 80px;
+            background-color: var(--white);
+            padding: 8px 12px;
+            border-radius: 18px;
+            font-size: 13px;
+            box-shadow: var(--shadow);
+            pointer-events: auto;
+        }
+        
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 12px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid var(--white);
+        }
+        
+        .road {
+            position: absolute;
+            background-color: var(--white);
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        }
+        
+        .landmark {
+            position: absolute;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            pointer-events: auto;
+        }
+        
+        .landmark-icon {
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: var(--white);
+        }
+        
+        .route-path {
+            position: absolute;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            z-index: 5;
+        }
+        
+        /* Meetups and Challenges page */
+        .meetup-page {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .search-bar {
+            height: 40px;
+            background-color: var(--white);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+            padding: 0 15px;
+        }
+        
+        .search-icon {
+            color: var(--gray);
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            height: 100%;
+            font-size: 14px;
+            background: transparent;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 5px 0 10px;
+        }
+        
+        .events-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 5px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .events-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .event-card {
+            min-width: 280px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .event-image {
+            height: 130px;
+            background-color: var(--primary-light);
+            position: relative;
+        }
+        
+        .event-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .event-content {
+            padding: 12px;
+        }
+        
+        .event-title {
+            font-size: The event's name;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .event-info {
+            display: flex;
+            gap: 10px;
+            color: var(--gray);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .event-description {
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #666;
+        }
+        
+        .join-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        .join-button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .challenge-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .challenge-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+        }
+        
+        .challenge-icon {
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        .challenge-content {
+            flex: 1;
+            padding: 12px;
+        }
+        
+        .challenge-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .challenge-stats {
+            display: flex;
+            gap: 10px;
+            color: var(--gray);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: var(--light-gray);
+            border-radius: 2px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .badges-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .badge.earned {
+            background-color: var(--accent);
+            color: var(--white);
+        }
+        
+        .badge.locked {
+            background-color: var(--light-gray);
+            color: var(--gray);
+        }
+        
+        /* Routes page */
+        .routes-page {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+        }
+        
+        .chat-header {
+            padding: 12px;
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 200px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            position: relative;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: var(--dark);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .chat-send {
+            margin-left: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .routes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .route-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .route-header {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .route-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .route-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .route-details {
+            padding: 12px;
+        }
+        
+        .route-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .route-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray);
+            font-size: 12px;
+        }
+        
+        .route-description {
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #666;
+        }
+        
+        .route-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .action-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .action-button:not(:last-child) {
+            border-right: 1px solid var(--light-gray);
+        }
+        
+        /* Events page */
+        .events-page {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .featured-event {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .featured-image {
+            height: 150px;
+            background-color: var(--primary-light);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .brand-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+        
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            background-color: black;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .featured-content {
+            padding: 15px;
+        }
+        
+        .featured-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .event-date {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .featured-description {
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #666;
+        }
+        
+        .reward-section {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .reward-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .rewards-list {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .reward-item {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+            font-size: 12px;
+            width: 80px;
+        }
+        
+        .reward-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .participants-section {
+            margin-bottom: 15px;
+        }
+        
+        .participants-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .participant {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .participant:nth-child(1) {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .participant:nth-child(2) {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .participant:nth-child(3) {
+            background-color: var(--accent);
+            color: var(--white);
+        }
+        
+        .register-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .upcoming-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .upcoming-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+        }
+        
+        .upcoming-image {
+            width: 80px;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        /* Pitch Deck page */
+        .pitch-page {
+            padding: 15px 15px 30px;
+            background-color: var(--white);
+        }
+        
+        .pitch-header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        
+        .pitch-logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .pitch-subtitle {
+            font-size: 15px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .pitch-section {
+            margin-bottom: 40px;
+        }
+        
+        .pitch-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .pitch-subtitle {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-description {
+            font-size: 12px;
+            color: var(--dark);
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        
+        .users-table th, .users-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .users-table th {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .problem-card {
+            background-color: #fff7e0;
+            border-left: 4px solid var(--accent);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+        
+        .solution-card {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .solution-check {
+            color: var(--primary);
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .solution-text {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .solution-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 16px;
+            font-style: italic;
+            color: var(--primary-dark);
+            margin: 20px 0;
+            padding: 10px;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+        }
+        
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .comp-table th, .comp-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--light-gray);
+            min-width: 70px;
+        }
+        
+        .comp-table th {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .comp-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .revenue-card {
+            background-color: #fff7e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .revenue-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .revenue-description {
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        .monetization-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        
+        .monetization-table th, .monetization-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .monetization-table th {
+            background-color: #fff7e0;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .financials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .financial-card {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .financial-year {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary-dark);
+            margin-bottom: 8px;
+        }
+        
+        .financial-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .financial-label {
+            font-size: 12px;
+            color: var(--dark);
+        }
+        
+        .investment-card {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .investment-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .investment-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .allocation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .allocation-item {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .allocation-percent {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .why-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .why-check {
+            color: var(--primary);
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .why-text {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .contact-section {
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .contact-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .contact-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(7, 193, 96, 0.7);
+            }
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(7, 193, 96, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(7, 193, 96, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header (WeChat Mini Program style) -->
+    <div class="app-header">
+        <div class="header-title">Qingye</div>
+    </div>
+    
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Map Page -->
+        <div class="page active" id="map-page">
+            <div class="map-container">
+                <div class="map-background"></div>
+                
+                <!-- Roads -->
+                <div class="road" style="top: 150px; left: 20px; width: 280px; height: 6px;"></div>
+                <div class="road" style="top: 150px; left: 20px; width: 6px; height: 300px;"></div>
+                <div class="road" style="top: 300px; left: 20px; width: 280px; height: 6px;"></div>
+                <div class="road" style="top: 150px; left: 150px; width: 6px; height: 300px;"></div>
+                <div class="road" style="top: 300px; left: 150px; width: 6px; height: 150px;"></div>
+                <div class="road" style="top: 450px; left: 20px; width: 280px; height: 6px;"></div>
+                
+                <!-- Route path -->
+                <div class="route-path" style="top: 200px; left: 35px; width: 100px; height: 80px;"></div>
+                <div class="route-path" style="top: 280px; left: 35px; width: 0; height: 150px;"></div>
+                
+                <!-- Landmarks -->
+                <div class="landmark" style="top: 220px; left: 45px;">
+                    <div class="landmark-icon" style="background-color: #E91E63;">🛍️</div>
+                    <span>Central Park Mall</span>
+                </div>
+                
+                <div class="landmark" style="top: 350px; left: 45px;">
+                    <div class="landmark-icon" style="background-color: #4CAF50;">🌳</div>
+                    <span>Lychee Park</span>
+                </div>
+                
+                <div class="landmark" style="top: 180px; left: 180px;">
+                    <div class="landmark-icon" style="background-color: #FF9800;">🍴</div>
+                    <span>Foodie Street</span>
+                </div>
+                
+                <div class="landmark" style="top: 380px; left: 180px;">
+                    <div class="landmark-icon" style="background-color: #2196F3;">🏛️</div>
+                    <span>Art District</span>
+                </div>
+                
+                <!-- User markers -->
+                <div class="map-users">
+                    <div class="map-user current" style="top: 300px; left: 35px;">You</div>
+                    <div class="map-user friend" style="top: 220px; left: 90px;">A</div>
+                    <div class="map-user friend" style="top: 160px; left: 200px;">B</div>
+                    <div class="map-user group" style="top: 400px; left: 200px;">5</div>
+                    
+                    <!-- Chat bubbles -->
+                    <div class="chat-bubble" style="top: 180px; left: 90px;">
+                        The coffee here is amazing!
+                    </div>
+                    
+                    <div class="chat-bubble" style="top: 130px; left: 200px;">
+                        Let's meet at Art District in 15 mins?
+                    </div>
+                </div>
+                
+                <!-- Map controls -->
+                <div class="map-controls">
+                    <div class="tool-buttons">
+                        <div class="tool-button">
+                            <i>📍</i>
+                        </div>
+                        <div class="tool-button location-button">
+                            <i>📌</i>
+                        </div>
+                        <div class="tool-button">
+                            <i>👥</i>
+                        </div>
+                    </div>
+                    
+                    <div class="control-bar">
+                        <input type="text" class="map-chat-input" placeholder="Send a message to nearby hikers...">
+                        <div class="send-button">
+                            <i>↑</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Meetups & Challenges Page -->
+        <div class="page" id="meetup-page">
+            <div class="meetup-page">
+                <div class="search-bar">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" placeholder="Search hiking groups and challenges...">
+                </div>
+                
+                <div class="section-title">Upcoming Hiking Meetups</div>
+                <div class="events-scroll">
+                    <div class="event-card">
+                        <div class="event-image" style="background-color: #e3f2fd;">
+                            <div class="event-badge">Tomorrow</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">Sunset Coastal Walk</div>
+                            <div class="event-info">
+                                <div>👥 27 participants</div>
+                                <div>📍 Seaside Park</div>
+                            </div>
+                            <div class="event-description">
+                                Join our relaxing evening coastal walk with stunning sunset views. Perfect for photography enthusiasts and nature lovers.
+                            </div>
+                            <button class="join-button">Join Group</button>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card">
+                        <div class="event-image" style="background-color: #e8f5e9;">
+                            <div class="event-badge">Saturday</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">Urban Architecture Tour</div>
+                            <div class="event-info">
+                                <div>👥 18 participants</div>
+                                <div>📍 Central Business District</div>
+                            </div>
+                            <div class="event-description">
+                                Explore the city's most iconic buildings with our architecture expert. Learn about design history while getting your steps in.
+                            </div>
+                            <button class="join-button">Join Group</button>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card">
+                        <div class="event-image" style="background-color: #fff8e1;">
+                            <div class="event-badge">Next Week</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">Photography Hiking Group</div>
+                            <div class="event-info">
+                                <div>👥 15 participants</div>
+                                <div>📍 Botanical Gardens</div>
+                            </div>
+                            <div class="event-description">
+                                Capture the beauty of nature while hiking through the city's botanical gardens. All skill levels welcome.
+                            </div>
+                            <button class="join-button">Join Group</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">Active Challenges</div>
+                <div class="challenge-list">
+                    <div class="challenge-card">
+                        <div class="challenge-icon">🏆</div>
+                        <div class="challenge-content">
+                            <div class="challenge-title">30-Day Step Challenge</div>
+                            <div class="challenge-stats">
+                                <div>⏱️ 12 days left</div>
+                                <div>👥 124 participants</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                            <div class="badges-row">
+                                <div class="badge earned">🥉</div>
+                                <div class="badge earned">🔥</div>
+                                <div class="badge locked">🥈</div>
+                                <div class="badge locked">🥇</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <div class="challenge-icon">🌍</div>
+                        <div class="challenge-content">
+                            <div class="challenge-title">City Landmarks Explorer</div>
+                            <div class="challenge-stats">
+                                <div>🏛️ 8/15 landmarks</div>
+                                <div>👥 87 participants</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 53%;"></div>
+                            </div>
+                            <div class="badges-row">
+                                <div class="badge earned">🏛️</div>
+                                <div class="badge earned">🌆</div>
+                                <div class="badge locked">🌟</div>
+                                <div class="badge locked">🎖️</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <div class="challenge-icon">👥</div>
+                        <div class="challenge-content">
+                            <div class="challenge-title">Team Distance Challenge</div>
+                            <div class="challenge-stats">
+                                <div>🚶 24.5/50 km</div>
+                                <div>👥 5 teammates</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 49%;"></div>
+                            </div>
+                            <div class="badges-row">
+                                <div class="badge earned">🏃</div>
+                                <div class="badge locked">⭐</div>
+                                <div class="badge locked">🏅</div>
+                                <div class="badge locked">👑</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">Create Your Own</div>
+                <div class="challenge-card">
+                    <div class="challenge-icon" style="color: var(--accent);">➕</div>
+                    <div class="challenge-content">
+                        <div class="challenge-title">Start a Hiking Group</div>
+                        <div class="challenge-description" style="color: #666; font-size: 13px; margin: 5px 0 10px;">
+                            Create your own hiking event or challenge. Invite friends or open it to the public.
+                        </div>
+                        <button class="join-button">Create Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Routes Page -->
+        <div class="page" id="routes-page">
+            <div class="routes-page">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        AI Route Assistant
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message bot">
+                            Hello! I'm your personal hiking assistant. Tell me what kind of route you're looking for today, and I'll recommend the perfect path for you.
+                        </div>
+                        <div class="message user">
+                            I want a casual 1-hour walk with nice coffee shops along the way.
+                        </div>
+                        <div class="message bot">
+                            Great choice! I recommend the "Urban Cafe Tour" route. It's a leisurely 4.2 km path with 5 highly-rated cafes along the way. You'll also pass by the Art District which has some great street art.
+                        </div>
+                        <div class="message user">
+                            Sounds perfect! Can you add some parks too?
+                        </div>
+                        <div class="message bot">
+                            I've modified the route to include Lychee Park and Central Gardens. The route is now 4.5 km and still achievable within your 1-hour timeframe. Would you like to see this route?
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" placeholder="Ask for route recommendations...">
+                        <div class="chat-send">
+                            <i>↑</i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">Recommended Routes for You</div>
+                <div class="routes-list">
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div class="route-name">Urban Cafe Tour</div>
+                            <div class="route-tag">4.5 km</div>
+                        </div>
+                        <div class="route-details">
+                            <div class="route-stats">
+                                <div class="route-stat">
+                                    <i>⏱️</i> 60 min
+                                </div>
+                                <div class="route-stat">
+                                    <i>☕</i> 5 cafes
+                                </div>
+                                <div class="route-stat">
+                                    <i>🌳</i> 2 parks
+                                </div>
+                            </div>
+                            <div class="route-description">
+                                A leisurely walk through the city center with stops at trendy cafes. Includes Lychee Park and passes through the Art District with beautiful street art.
+                            </div>
+                            <div class="route-actions">
+                                <div class="action-button">
+                                    <i>👁️</i> Preview
+                                </div>
+                                <div class="action-button">
+                                    <i>🚶</i> Start
+                                </div>
+                                <div class="action-button">
+                                    <i>💾</i> Save
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div class="route-name">Historical City Walk</div>
+                            <div class="route-tag">5.2 km</div>
+                        </div>
+                        <div class="route-details">
+                            <div class="route-stats">
+                                <div class="route-stat">
+                                    <i>⏱️</i> 75 min
+                                </div>
+                                <div class="route-stat">
+                                    <i>🏛️</i> 8 landmarks
+                                </div>
+                                <div class="route-stat">
+                                    <i>⭐</i> 4.8
+                                </div>
+                            </div>
+                            <div class="route-description">
+                                Explore the rich history of the city with this route that passes by historic buildings, monuments, and cultural sites. Perfect for history enthusiasts.
+                            </div>
+                            <div class="route-actions">
+                                <div class="action-button">
+                                    <i>👁️</i> Preview
+                                </div>
+                                <div class="action-button">
+                                    <i>🚶</i> Start
+                                </div>
+                                <div class="action-button">
+                                    <i>💾</i> Save
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div class="route-name">Waterfront Scenic Route</div>
+                            <div class="route-tag">6.8 km</div>
+                        </div>
+                        <div class="route-details">
+                            <div class="route-stats">
+                                <div class="route-stat">
+                                    <i>⏱️</i> 90 min
+                                </div>
+                                <div class="route-stat">
+                                    <i>📸</i> 6 photo spots
+                                </div>
+                                <div class="route-stat">
+                                    <i>⭐</i> 4.9
+                                </div>
+                            </div>
+                            <div class="route-description">
+                                A beautiful route along the waterfront with stunning views, perfect for sunset walks and photography. Includes several rest areas and viewing platforms.
+                            </div>
+                            <div class="route-actions">
+                                <div class="action-button">
+                                    <i>👁️</i> Preview
+                                </div>
+                                <div class="action-button">
+                                    <i>🚶</i> Start
+                                </div>
+                                <div class="action-button">
+                                    <i>💾</i> Save
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Brand Events Page -->
+        <div class="page" id="events-page">
+            <div class="events-page">
+                <div class="featured-event">
+                    <div class="featured-image">
+                        <div class="brand-overlay">
+                            <div class="brand-logo">N</div>
+                        </div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-title">Nike 10K City Walk Challenge</div>
+                        <div class="event-date">
+                            <i>📅</i> April 15-30, 2025
+                        </div>
+                        <div class="featured-description">
+                            Join Nike's exclusive 10K city walk challenge! Complete the distance over two weeks, explore new urban trails, and earn exclusive Nike rewards. Walk solo or form a team to compete on the leaderboard.
+                        </div>
+                        
+                        <div class="reward-section">
+                            <div class="reward-title">
+                                <i>🎁</i> Complete to Earn
+                            </div>
+                            <div class="rewards-list">
+                                <div class="reward-item">
+                                    <div class="reward-icon">👟</div>
+                                    <div>15% Nike Discount</div>
+                                </div>
+                                <div class="reward-item">
+                                    <div class="reward-icon">🏆</div>
+                                    <div>Exclusive Badge</div>
+                                </div>
+                                <div class="reward-item">
+                                    <div class="reward-icon">🍶</div>
+                                    <div>Nike Water Bottle</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="participants-section">
+                            <div class="participants-title">
+                                <i>👥</i> 378 People Registered
+                            </div>
+                            <div class="participants-list">
+                                <div class="participant">You</div>
+                                <div class="participant">A</div>
+                                <div class="participant">Z</div>
+                                <div class="participant">M</div>
+                                <div class="participant">K</div>
+                                <div class="participant">J</div>
+                                <div class="participant">+</div>
+                            </div>
+                        </div>
+                        
+                        <button class="register-button">Register Now</button>
+                    </div>
+                </div>
+                
+                <div class="section-title">More Brand Events</div>
+                <div class="upcoming-list">
+                    <div class="upcoming-card">
+                        <div class="upcoming-image">
+                            <div style="font-weight: bold;">TNF</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">The North Face Urban Explorer</div>
+                            <div class="event-info">
+                                <div>📅 Starting May 10</div>
+                                <div>👥 156 registered</div>
+                            </div>
+                            <div class="event-description">
+                                Discover hidden urban trails and city viewpoints with The North Face.
+                            </div>
+                            <button class="join-button">Learn More</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-card">
+                        <div class="upcoming-image" style="background-color: #e3f2fd; color: #1565C0;">
+                            <div style="font-weight: bold;">A</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">Adidas City Marathon</div>
+                            <div class="event-info">
+                                <div>📅 June 5-12</div>
+                                <div>👥 211 registered</div>
+                            </div>
+                            <div class="event-description">
+                                Complete a full marathon distance over 7 days at your own pace.
+                            </div>
+                            <button class="join-button">Learn More</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-card">
+                        <div class="upcoming-image" style="background-color: #fce4ec; color: #C2185B;">
+                            <div style="font-weight: bold;">UA</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">Under Armour Team Challenge</div>
+                            <div class="event-info">
+                                <div>📅 Coming Soon</div>
+                                <div>👥 Pre-register now</div>
+                            </div>
+                            <div class="event-description">
+                                Form teams of 4 and compete to cover the most distance in 2 weeks.
+                            </div>
+                            <button class="join-button">Pre-register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pitch Deck Page -->
+        <div class="page" id="pitch-page">
+            <div class="pitch-page">
+                <div class="pitch-header">
+                    <div class="pitch-logo">Qingye</div>
+                    <div class="pitch-subtitle">The Future of Urban Hiking &amp; Social Adventure</div>
+                </div>
+                
+                <!-- Market Opportunity Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Market Opportunity</h2>
+                    <h3 class="pitch-subtitle">A Rapidly Growing Market for Social &amp; Outdoor Fitness</h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">$150B</div>
+                            <div class="stat-description">China's outdoor sports market by 2030</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">400M+</div>
+                            <div class="stat-description">Young urban dwellers in casual outdoor activities</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">30%</div>
+                            <div class="stat-description">YoY growth in social fitness apps</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">🚀</div>
+                            <div class="stat-description">City Walk trend is exploding</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- User Analysis Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">User Analysis</h2>
+                    <h3 class="pitch-subtitle">Qingye's Core Users &amp; Their Motivations</h3>
+                    
+                    <table class="users-table">
+                        <tbody><tr>
+                            <th>User Type</th>
+                            <th>Pain Points</th>
+                            <th>Qingye's Solution</th>
+                        </tr>
+                        <tr>
+                            <td>Urban Young Professionals (22-35)</td>
+                            <td>Want to stay active but dislike the gym</td>
+                            <td>Gamified challenges + social city walks</td>
+                        </tr>
+                        <tr>
+                            <td>Gen Z &amp; College Students (18-25)</td>
+                            <td>Love social engagement &amp; viral trends</td>
+                            <td>Team-based hiking challenges + real-time social maps</td>
+                        </tr>
+                        <tr>
+                            <td>Casual Outdoor Enthusiasts (25-40)</td>
+                            <td>Enjoy hiking but lack time for long trips</td>
+                            <td>AI-generated city walking routes</td>
+                        </tr>
+                    </tbody></table>
+                </div>
+                
+                <!-- Problem Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">The Problem</h2>
+                    <h3 class="pitch-subtitle">"Hiking is either too isolated or too complex."</h3>
+                    
+                    <div class="problem-card">
+                        ❌ Keep &amp; Strava → Too fitness-oriented, lacks real-time social interaction.
+                    </div>
+                    <div class="problem-card">
+                        ❌ Xiaohongshu → Great for content discovery, but not real-time engagement.
+                    </div>
+                    <div class="problem-card">
+                        ❌ 行者 → Focuses on hardcore outdoor sports, not casual urban hikers.
+                    </div>
+                    <div class="problem-card">
+                        ❌ Traditional hiking requires too much planning, discouraging casual participation.
+                    </div>
+                    <div class="problem-card">
+                        ❌ Social platforms lack real-time, location-based engagement.
+                    </div>
+                    
+                    <div style="margin-top: 15px; background-color: var(--primary-light); padding: 10px; border-radius: 8px; text-align: center;">
+                        <strong>Opportunity:</strong> A social-first urban hiking platform that integrates real-time mapping, group activities, and gamification.
+                    </div>
+                </div>
+                
+                <!-- Solution Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Our Solution</h2>
+                    <h3 class="pitch-subtitle">"Qingye transforms hiking into a social, interactive, and gamified experience."</h3>
+                    
+                    <div class="solution-card">
+                        <div class="solution-check">✅</div>
+                        <div class="solution-text">
+                            <div class="solution-title">Urban Hiking + Social Networking</div>
+                            <div>Find and join real-time walking groups.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-card">
+                        <div class="solution-check">✅</div>
+                        <div class="solution-text">
+                            <div class="solution-title">Live Map Interaction</div>
+                            <div>See other hikers nearby, chat via location-based messages.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-card">
+                        <div class="solution-check">✅</div>
+                        <div class="solution-text">
+                            <div class="solution-title">Gamified Challenges &amp; Rewards</div>
+                            <div>Participate in team challenges, earn badges, unlock brand-sponsored rewards.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-card">
+                        <div class="solution-check">✅</div>
+                        <div class="solution-text">
+                            <div class="solution-title">Personalized Hiking Routes</div>
+                            <div>AI-generated city walking paths based on preferences.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-card">
+                        <div class="solution-check">✅</div>
+                        <div class="solution-text">
+                            <div class="solution-title">Hiking Meetups &amp; Events</div>
+                            <div>Organize and join local hiking groups effortlessly.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tagline">
+                        "Hiking made social, fun, and rewarding."
+                    </div>
+                </div>
+                
+                <!-- Competitive Landscape Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Competitive Landscape</h2>
+                    <h3 class="pitch-subtitle">Why Qingye Wins?</h3>
+                    
+                    <table class="comp-table">
+                        <tbody><tr>
+                            <th>Feature</th>
+                            <th>Qingye</th>
+                            <th>Keep</th>
+                            <th>Strava</th>
+                            <th>Xingzhe</th>
+                            <th>Xiaohongshu</th>
+                        </tr>
+                        <tr>
+                            <td>Social Hiking</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Real-Time Location Chat</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Team-Based Challenges</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Urban Hiking Focus</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Brand-Sponsored Events</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                    </tbody></table>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>Why We Win:</strong></p>
+                        <ul style="list-style-type: none; margin-top: 8px;">
+                            <li style="margin-bottom: 8px;">• Unlike Strava/Xingzhe, we focus on social-driven hiking instead of fitness tracking.</li>
+                            <li>• Unlike Xiaohongshu, we offer real-time engagement, location-based interaction, and gamification.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Business Model Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Business Model</h2>
+                    <h3 class="pitch-subtitle">Multi-Stream Revenue Model</h3>
+                    
+                    <div class="revenue-card">
+                        <div class="revenue-title">
+                            <i>💰</i> Freemium Subscription
+                        </div>
+                        <div class="revenue-description">
+                            Qingye Pro offers premium features including AI route customization, exclusive challenges, and offline maps.
+                        </div>
+                    </div>
+                    
+                    <div class="revenue-card">
+                        <div class="revenue-title">
+                            <i>🏆</i> Brand Sponsorships &amp; Challenges
+                        </div>
+                        <div class="revenue-description">
+                            Nike, The North Face, Adidas sponsor hiking events with exclusive rewards.
+                        </div>
+                    </div>
+                    
+                    <div class="revenue-card">
+                        <div class="revenue-title">
+                            <i>🛍️</i> Hiking Gear &amp; Apparel Sales
+                        </div>
+                        <div class="revenue-description">
+                            Partner with outdoor brands for exclusive in-app shopping.
+                        </div>
+                    </div>
+                    
+                    <table class="monetization-table">
+                        <tbody><tr>
+                            <th>User Type</th>
+                            <th>Primary Revenue Model</th>
+                        </tr>
+                        <tr>
+                            <td>Casual Hikers</td>
+                            <td>Freemium model: Paid challenges, premium route recommendations</td>
+                        </tr>
+                        <tr>
+                            <td>Social Explorers</td>
+                            <td>Brand-sponsored challenges: Exclusive events with Nike, Adidas, North Face</td>
+                        </tr>
+                        <tr>
+                            <td>Corporate Users</td>
+                            <td>B2B partnerships: Wellness programs, company-sponsored team challenges</td>
+                        </tr>
+                    </tbody></table>
+                </div>
+                
+                <!-- Financial Projections Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Financial Projections</h2>
+                    <h3 class="pitch-subtitle">5-Year Growth Plan</h3>
+                    
+                    <div class="financials-grid">
+                        <div class="financial-card">
+                            <div class="financial-year">Year 1</div>
+                            <div class="financial-value">$1M</div>
+                            <div class="financial-label">Revenue</div>
+                            <div class="financial-value" style="margin-top: 10px;">500K</div>
+                            <div class="financial-label">Users</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-year">Year 2</div>
+                            <div class="financial-value">$10M</div>
+                            <div class="financial-label">Revenue</div>
+                            <div class="financial-value" style="margin-top: 10px;">3M</div>
+                            <div class="financial-label">Users</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-year">Year 3</div>
+                            <div class="financial-value">$50M</div>
+                            <div class="financial-label">Revenue</div>
+                            <div class="financial-value" style="margin-top: 10px;">10M</div>
+                            <div class="financial-label">Users</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-year">Year 4</div>
+                            <div class="financial-value">$150M+</div>
+                            <div class="financial-label">Revenue</div>
+                            <div class="financial-value" style="margin-top: 10px;">25M+</div>
+                            <div class="financial-label">Users</div>
+                        </div>
+                    </div>
+                    
+                    <div class="investment-card">
+                        <div class="investment-title">Investment Ask</div>
+                        <div class="investment-amount">$5M (Seed Round)</div>
+                        
+                        <div class="allocation-grid">
+                            <div class="allocation-item">
+                                <div class="allocation-percent">40%</div>
+                                <div>Product Development</div>
+                            </div>
+                            <div class="allocation-item">
+                                <div class="allocation-percent">35%</div>
+                                <div>Marketing &amp; Growth</div>
+                            </div>
+                            <div class="allocation-item">
+                                <div class="allocation-percent">15%</div>
+                                <div>Brand Partnerships</div>
+                            </div>
+                            <div class="allocation-item">
+                                <div class="allocation-percent">10%</div>
+                                <div>Operational Costs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Why Invest Section -->
+                <div class="pitch-section">
+                    <h2 class="pitch-section-title">Why Invest in Qingye?</h2>
+                    <h3 class="pitch-subtitle">The Next Big Thing in Social Fitness &amp; Urban Exploration</h3>
+                    
+                    <div class="why-item">
+                        <div class="why-check">✅</div>
+                        <div class="why-text">
+                            <strong>Massive market potential</strong> with no dominant player in the urban hiking social space.
+                        </div>
+                    </div>
+                    
+                    <div class="why-item">
+                        <div class="why-check">✅</div>
+                        <div class="why-text">
+                            <strong>Deeply rooted in behavioral psychology</strong> — users are naturally motivated to engage.
+                        </div>
+                    </div>
+                    
+                    <div class="why-item">
+                        <div class="why-check">✅</div>
+                        <div class="why-text">
+                            <strong>Multiple revenue streams:</strong> brand challenges, local business partnerships, premium subscriptions.
+                        </div>
+                    </div>
+                    
+                    <div class="why-item">
+                        <div class="why-check">✅</div>
+                        <div class="why-text">
+                            <strong>Led by a team</strong> with proven experience in social platforms, fitness tech, and urban exploration.
+                        </div>
+                    </div>
+                    
+                    <div class="contact-section">
+                        <div class="contact-title">Join us in redefining urban exploration</div>
+                        <p>Let's talk about how Qingye is transforming the way people experience cities</p>
+                        <button class="contact-button">Contact Us</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- WeChat Mini Program Style Tab Bar -->
+    <div class="tab-bar">
+        <div class="tab active" onclick="showPage('map-page')">
+            <div class="tab-icon">🗺️</div>
+            <div class="tab-label">Map</div>
+        </div>
+        <div class="tab" onclick="showPage('meetup-page')">
+            <div class="tab-icon">👥</div>
+            <div class="tab-label">Meetups</div>
+        </div>
+        <div class="tab" onclick="showPage('routes-page')">
+            <div class="tab-icon">🧠</div>
+            <div class="tab-label">Routes</div>
+        </div>
+        <div class="tab" onclick="showPage('events-page')">
+            <div class="tab-icon">🏆</div>
+            <div class="tab-label">Events</div>
+        </div>
+        <div class="tab" onclick="showPage('pitch-page')">
+            <div class="tab-icon">📊</div>
+            <div class="tab-label">About</div>
+        </div>
+    </div>
+    
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Find the clicked tab and make it active
+            event.currentTarget.classList.add('active');
+            
+            // Update header title based on the page
+            let headerTitle = 'Qingye';
+            switch(pageId) {
+                case 'map-page':
+                    headerTitle = 'Explore Nearby';
+                    break;
+                case 'meetup-page':
+                    headerTitle = 'Hiking Groups & Challenges';
+                    break;
+                case 'routes-page':
+                    headerTitle = 'AI Route Recommendations';
+                    break;
+                case 'events-page':
+                    headerTitle = 'Brand Events';
+                    break;
+                case 'pitch-page':
+                    headerTitle = 'About Qingye';
+                    break;
+            }
+            document.querySelector('.header-title').textContent = headerTitle;
+        }
+    </script>
+
+
+</body></html>
