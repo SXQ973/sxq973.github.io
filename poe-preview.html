@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qingye - Urban Hiking App</title>
@@ -29,26 +27,23 @@
         }
         
         body {
-            background-color: #f8f9fa;
+            background-color: #001029;
             color: var(--dark);
             line-height: 1.6;
             overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
         }
         
         /* WeChat Mini Program Style */
         .app-container {
             position: relative;
-            width: 375px;
-            height: 667px;
+            width: 100%;
+            height: 100%;
             background-color: #001029;
-            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         }
         
         /* Pages */
@@ -82,8 +77,10 @@
             padding: 15px;
             display: flex;
             align-items: center;
-            background-color: transparent;
+            background-color: rgba(0, 16, 41, 0.5);
             z-index: 5;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .header-left {
@@ -126,7 +123,10 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
-            background-color: transparent;
+            background-color: rgba(0, 16, 41, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 5;
         }
         
         .location-info {
@@ -189,7 +189,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.7;
+            opacity: 0.9;
         }
         
         .map-routes {
@@ -208,6 +208,29 @@
             border-radius: 10px;
         }
         
+        .route-path {
+            position: absolute;
+            z-index: 2;
+            stroke: #23b5b5;
+            stroke-width: 4;
+            stroke-dasharray: 8 4;
+            filter: drop-shadow(0 0 3px rgba(35, 181, 181, 0.6));
+        }
+        
+        .route-destination {
+            position: absolute;
+            z-index: 3;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .route-start {
+            position: absolute;
+            z-index: 3;
+            width: 24px;
+            height: 24px;
+        }
+        
         .map-blob-1 {
             position: absolute;
             top: 10%;
@@ -217,7 +240,7 @@
             background-color: #0cc0df;
             border-radius: 50%;
             filter: blur(20px);
-            opacity: 0.6;
+            opacity: 0.4;
             z-index: 1;
         }
         
@@ -230,7 +253,7 @@
             background-color: #0c4cd3;
             border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
             filter: blur(20px);
-            opacity: 0.6;
+            opacity: 0.4;
             z-index: 1;
         }
         
@@ -243,9 +266,9 @@
         
         .map-user {
             position: absolute;
-            width: 34px;
-            height: 34px;
-            border-radius: 17px;
+            width: 42px;
+            height: 42px;
+            border-radius: 21px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -254,12 +277,12 @@
             z-index: 4;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
+            overflow: hidden;
         }
         
         .map-user img {
             width: 100%;
             height: 100%;
-            border-radius: 17px;
             object-fit: cover;
         }
         
@@ -271,8 +294,16 @@
             font-size: 13px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             z-index: 3;
-            max-width: 120px;
+            max-width: 140px;
             white-space: nowrap;
+        }
+        
+        .chat-bubble.right {
+            border-bottom-right-radius: 0;
+        }
+        
+        .chat-bubble.left {
+            border-bottom-left-radius: 0;
         }
         
         .chat-bubble.likes {
@@ -310,12 +341,44 @@
             border-radius: 50%;
         }
         
+        .navigation-instruction {
+            position: absolute;
+            background-color: rgba(35, 181, 181, 0.85);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+            max-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instruction-icon {
+            font-size: 18px;
+        }
+        
+        .instruction-text {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .instruction-distance {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        
         /* Footer */
         .hiking-footer {
-            background-color: transparent;
+            background-color: rgba(0, 16, 41, 0.5);
             color: white;
             padding: 10px 15px;
             z-index: 5;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .hiking-stats {
@@ -339,6 +402,42 @@
             color: rgba(255, 255, 255, 0.7);
         }
         
+        .map-input-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: rgba(0, 16, 41, 0.7);
+            margin-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .map-input-field {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+        
+        .map-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .map-send-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #23b5b5;
+            color: white;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
         /* Tab Bar */
         .tab-bar {
             display: flex;
@@ -346,6 +445,8 @@
             height: 50px;
             background-color: rgba(0, 16, 41, 0.9);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .tab {
@@ -567,27 +668,35 @@
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(35, 181, 181, 0.5);
+            max-height: calc(100vh - 240px);
+            display: flex;
+            flex-direction: column;
         }
         
         .chat-header {
-            padding: 12px 15px;
+            padding: 18px;
             background-color: #23b5b5;
             color: white;
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 18px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
         .chat-messages {
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            height: 160px;
+            gap: 18px;
+            height: 350px;
+            min-height: 350px;
             overflow-y: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            flex: 1;
         }
         
         .chat-messages::-webkit-scrollbar {
@@ -596,10 +705,11 @@
         
         .message {
             max-width: 85%;
-            padding: 10px 15px;
+            padding: 14px 16px;
             border-radius: 18px;
-            font-size: 13px;
+            font-size: 15px;
             position: relative;
+            line-height: 1.5;
         }
         
         .message.user {
@@ -619,8 +729,9 @@
         .chat-input-container {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
+            padding: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
         }
         
         .chat-field {
@@ -628,9 +739,9 @@
             border: none;
             outline: none;
             background-color: rgba(255, 255, 255, 0.1);
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 14px 18px;
+            border-radius: 24px;
+            font-size: 15px;
             color: white;
         }
         
@@ -639,16 +750,17 @@
         }
         
         .send-btn {
-            margin-left: 10px;
-            width: 36px;
-            height: 36px;
-            border-radius: 18px;
+            margin-left: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
             background-color: #23b5b5;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
         .routes-list {
@@ -969,6 +1081,14 @@
             border: 1px solid rgba(35, 181, 181, 0.5);
         }
         
+        .ellipsis-row {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            letter-spacing: 3px;
+            margin: 5px 0;
+        }
+        
         .rank-position {
             width: 36px;
             height: 36px;
@@ -1053,6 +1173,13 @@
             font-size: 40px;
             font-weight: bold;
             border: 4px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .profile-name {
@@ -1199,26 +1326,21 @@
             color: rgba(255, 255, 255, 0.5);
         }
         
-        @media (max-width: 400px) {
-            .app-container {
-                width: 100%;
-                height: 100vh;
-                border-radius: 0;
+        /* For mobile */
+        @media (max-width: 600px) {
+            .events-scroll .event-card {
+                min-width: 180px;
             }
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(35, 181, 181, 0.7);
+            
+            .map-user {
+                width: 30px;
+                height: 30px;
+                border-radius: 15px;
             }
-            70% {
-                transform: scale(1.1);
-                box-shadow: 0 0 0 10px rgba(35, 181, 181, 0);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(35, 181, 181, 0);
+            
+            .chat-bubble {
+                font-size: 12px;
+                max-width: 100px;
             }
         }
     </style>
@@ -1268,6 +1390,35 @@
                         <div class="cloud" style="bottom: 15%; right: 25%; width: 35px; height: 22px;"></div>
                     </div>
                     
+                    <!-- Navigation Route -->
+                    <svg class="route-path" viewBox="0 0 375 667" width="100%" height="100%" fill="none">
+                        <path d="M42,310 Q75,280 120,300 L200,340 Q240,360 260,330 L300,280 Q320,260 350,280 L375,300" stroke="#23b5b5" stroke-width="4" stroke-dasharray="8 4"></path>
+                    </svg>
+                    
+                    <!-- Start and Destination Markers -->
+                    <div class="route-start" style="top: 310px; left: 42px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#23b5b5" stroke="white" stroke-width="2"></circle>
+                            <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">A</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="route-destination" style="top: 300px; left: 375px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#f5222d" stroke="white" stroke-width="2"></circle>
+                            <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">B</text>
+                        </svg>
+                    </div>
+                    
+                    <!-- Navigation Instruction -->
+                    <div class="navigation-instruction" style="top: 180px; left: 20px; right: 20px;">
+                        <div class="instruction-icon">↗️</div>
+                        <div>
+                            <div class="instruction-text">Walk northeast toward Central Park</div>
+                            <div class="instruction-distance">250m • 3 min remaining</div>
+                        </div>
+                    </div>
+                    
                     <!-- Map Routes -->
                     <div class="map-routes">
                         <div class="map-route" style="top: 100px; left: 40px; width: 90px; height: 60px;"></div>
@@ -1278,63 +1429,63 @@
                     
                     <!-- User / Hikers -->
                     <div class="map-user" style="top: 15%; left: 40%;" onclick="showProfile()">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjMjNCNUI1Ij48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble" style="top: 8%; left: 30%;">
+                    <div class="chat-bubble right" style="top: 8%; left: 42%;">
                         Lost!
                     </div>
                     
                     <div class="map-user" style="top: 25%; left: 62%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjRjkyNjcyIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
                     <div class="map-user" style="top: 40%; left: 20%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjRkE4QzE2Ij48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble" style="top: 45%; left: 10%;">
+                    <div class="chat-bubble left" style="top: 36%; left: 23%;">
                         Ava Hiker <br>Just cool
                     </div>
                     
                     <div class="map-user" style="top: 50%; left: 75%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjN0IzNkZGIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble" style="top: 42%; left: 65%;">
+                    <div class="chat-bubble left" style="top: 42%; left: 78%;">
                         Lazy Day
                     </div>
                     
                     <div class="map-user" style="top: 60%; left: 60%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjMjNCNUI1Ij48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble" style="top: 55%; left: 50%;">
+                    <div class="chat-bubble left" style="top: 55%; left: 63%;">
                         Ava too!
                     </div>
                     
                     <div class="map-user" style="bottom: 25%; left: 30%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjRkEyNjFGIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble likes" style="bottom: 35%; left: 20%;">
+                    <div class="chat-bubble likes left" style="bottom: 33%; left: 33%;">
                         <span>❤️</span> Mom!
                     </div>
                     
                     <div class="map-user" style="bottom: 15%; left: 60%;">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjNTJDNDFBIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMCIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYwLDE2NWMwLTMzLjEtMjYuOS02MC02MC02MHMtNjAsMjYuOS02MCw2MCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
                     </div>
                     
-                    <div class="chat-bubble likes" style="bottom: 25%; right: 15%;">
+                    <div class="chat-bubble likes left" style="bottom: 22%; left: 63%;">
                         <span>❤️</span> Pause
                     </div>
                     
                     <!-- Landmark in bottom area -->
                     <div style="position: absolute; bottom: 15%; left: 15%; z-index: 3;">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                            <rect width="40" height="40" rx="8" fill="#0cc0df" fill-opacity="0.2"/>
-                            <path d="M20 8L28 18H12L20 8Z" fill="#0cc0df"/>
-                            <rect x="14" y="18" width="12" height="14" fill="#0cc0df"/>
+                            <rect width="40" height="40" rx="8" fill="#0cc0df" fill-opacity="0.2"></rect>
+                            <path d="M20 8L28 18H12L20 8Z" fill="#0cc0df"></path>
+                            <rect x="14" y="18" width="12" height="14" fill="#0cc0df"></rect>
                         </svg>
                     </div>
                 </div>
@@ -1349,6 +1500,14 @@
                         <div class="stat-block">
                             <div class="stat-amount" style="color: #23b5b5;">#147</div>
                             <div class="stat-label">Rank</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map Input Area -->
+                    <div class="map-input-container">
+                        <input type="text" class="map-input-field" placeholder="Share your thoughts on the map...">
+                        <div class="map-send-btn">
+                            <i>↑</i>
                         </div>
                     </div>
                 </div>
@@ -1385,7 +1544,7 @@
                     <div class="header-left">
                         <div class="header-logo">🏆</div>
                         <div class="header-text">
-                            <div class="header-title">Events & Challenges</div>
+                            <div class="header-title">Events &amp; Challenges</div>
                             <div class="header-subtitle">Compete and earn rewards</div>
                         </div>
                     </div>
@@ -1405,36 +1564,38 @@
                                 <div class="rank-position top-1">1</div>
                                 <div class="rank-info">
                                     <div class="rank-name">Alex Thompson</div>
-                                    <div class="rank-stats">9.8 km • 12,560 steps</div>
+                                    <div class="rank-stats">12,560 steps</div>
                                 </div>
-                                <div class="rank-score">98%</div>
+                                <div class="rank-score">9.8 km</div>
                             </div>
                             
                             <div class="rank-item">
                                 <div class="rank-position top-2">2</div>
                                 <div class="rank-info">
                                     <div class="rank-name">Sarah Wong</div>
-                                    <div class="rank-stats">9.5 km • 12,230 steps</div>
+                                    <div class="rank-stats">12,230 steps</div>
                                 </div>
-                                <div class="rank-score">95%</div>
+                                <div class="rank-score">9.5 km</div>
                             </div>
                             
                             <div class="rank-item">
                                 <div class="rank-position top-3">3</div>
                                 <div class="rank-info">
                                     <div class="rank-name">Michael Chen</div>
-                                    <div class="rank-stats">9.3 km • 11,980 steps</div>
+                                    <div class="rank-stats">11,980 steps</div>
                                 </div>
-                                <div class="rank-score">93%</div>
+                                <div class="rank-score">9.3 km</div>
                             </div>
+                            
+                            <div class="ellipsis-row">•••</div>
                             
                             <div class="rank-item you">
                                 <div class="rank-position">147</div>
                                 <div class="rank-info">
                                     <div class="rank-name">You</div>
-                                    <div class="rank-stats">5.2 km • 6,740 steps</div>
+                                    <div class="rank-stats">6,740 steps</div>
                                 </div>
-                                <div class="rank-score">52%</div>
+                                <div class="rank-score">5.2 km</div>
                             </div>
                         </div>
                     </div>
@@ -1563,7 +1724,7 @@
                         <div class="header-logo">👥</div>
                         <div class="header-text">
                             <div class="header-title">Hiking Meetups</div>
-                            <div class="header-subtitle">Join Groups & Challenges</div>
+                            <div class="header-subtitle">Join Groups &amp; Challenges</div>
                         </div>
                     </div>
                 </div>
@@ -1711,17 +1872,6 @@
                     </div>
                 </div>
                 
-                <!-- Location Bar -->
-                <div class="location-bar">
-                    <div class="location-info">
-                        <div class="location-icon">📍</div>
-                        <div class="location-text">Current: Downtown</div>
-                    </div>
-                    <button class="follow-button">
-                        <span class="follow-icon">📍</span> Change
-                    </button>
-                </div>
-                
                 <!-- Routes Content -->
                 <div class="routes-content">
                     <div class="chat-container">
@@ -1743,6 +1893,18 @@
                             </div>
                             <div class="message bot">
                                 I've modified the route to include Lychee Park and Central Gardens. The route is now 4.5 km and still within your timeframe.
+                            </div>
+                            <div class="message user">
+                                Perfect! Are there any historic buildings on this route?
+                            </div>
+                            <div class="message bot">
+                                Yes! Your route will pass by the Old City Hall (built 1908) and the Art Deco Theater. Both are architectural landmarks with rich history. Would you like me to include more historical sites?
+                            </div>
+                            <div class="message user">
+                                Sounds perfect! Can I invite friends to join this walk?
+                            </div>
+                            <div class="message bot">
+                                Absolutely! I've created a shareable link for this route. Your friends can join by clicking the link or scanning the QR code in the app. Would you like me to suggest a meeting point and time based on weather conditions?
                             </div>
                         </div>
                         <div class="chat-input-container">
@@ -1857,7 +2019,7 @@
                     <!-- Profile Header -->
                     <div class="profile-header">
                         <div class="profile-avatar">
-                            <span>A</span>
+                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="Alex Walker">
                         </div>
                         <div class="profile-name">Alex Walker</div>
                         <div class="profile-bio">Urban hiking enthusiast. Love discovering new city perspectives and meeting fellow hikers!</div>
@@ -1933,7 +2095,7 @@
                                 </div>
                                 <div class="settings-item">
                                     <div class="settings-icon">❓</div>
-                                    <div class="settings-name">Help & Support</div>
+                                    <div class="settings-name">Help &amp; Support</div>
                                     <div class="settings-arrow">→</div>
                                 </div>
                                 <div class="settings-item">
@@ -2000,5 +2162,6 @@
             switchTab('profile-page');
         }
     </script>
-</body>
-</html>
+
+
+</body></html>
