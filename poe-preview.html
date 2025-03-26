@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qingye - Urban Hiking App</title>
@@ -662,41 +664,48 @@
             padding: 15px;
             overflow-y: auto;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column; /* Changed to column for better structure */
         }
         
         .chat-container {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* Reduced margin */
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
             border: 2px solid rgba(35, 181, 181, 0.5);
-            max-height: calc(100vh - 240px);
             display: flex;
             flex-direction: column;
+            /* Instead of fixed height, use min-height and flex properties */
+            min-height: 300px;
+            flex: 1; /* Let it grow to fill available space */
         }
         
         .chat-header {
-            padding: 18px;
+            padding: 15px;
             background-color: #23b5b5;
             color: white;
             font-weight: 600;
             font-size: 18px;
             text-align: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            /* Added position sticky to keep it visible */
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .chat-messages {
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            height: 350px;
-            min-height: 350px;
+            gap: 15px;
             overflow-y: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
             flex: 1;
+            min-height: 200px; /* Ensure minimum height */
         }
         
         .chat-messages::-webkit-scrollbar {
@@ -705,9 +714,9 @@
         
         .message {
             max-width: 85%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-radius: 18px;
-            font-size: 15px;
+            font-size: 14px;
             position: relative;
             line-height: 1.5;
         }
@@ -729,9 +738,13 @@
         .chat-input-container {
             display: flex;
             align-items: center;
-            padding: 18px;
+            padding: 12px 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background-color: rgba(0, 0, 0, 0.2);
+            /* Added position sticky to keep it at the bottom */
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
         }
         
         .chat-field {
@@ -739,9 +752,9 @@
             border: none;
             outline: none;
             background-color: rgba(255, 255, 255, 0.1);
-            padding: 14px 18px;
+            padding: 12px 15px;
             border-radius: 24px;
-            font-size: 15px;
+            font-size: 14px;
             color: white;
         }
         
@@ -750,10 +763,10 @@
         }
         
         .send-btn {
-            margin-left: 12px;
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
             background-color: #23b5b5;
             color: white;
             display: flex;
@@ -761,6 +774,10 @@
             justify-content: center;
             font-size: 18px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .routes-section {
+            margin-top: 15px;
         }
         
         .routes-list {
@@ -842,6 +859,15 @@
         
         .action-button:not(:last-child) {
             border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Added scroll indicator for chat */
+        .scroll-indicator {
+            width: 40px;
+            height: 4px;
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 5px auto;
         }
         
         /* Events Page */
@@ -1342,6 +1368,44 @@
                 font-size: 12px;
                 max-width: 100px;
             }
+            
+            /* Improve mobile chat experience */
+            .chat-container {
+                flex: 1;
+                max-height: none; /* Remove max-height constraint */
+                height: 100%; /* Take full available height */
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .chat-messages {
+                flex: 1;
+                max-height: none;
+                overflow-y: auto;
+            }
+            
+            .routes-content {
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                height: calc(100% - 50px - 50px); /* Full height minus header and tab bar */
+            }
+            
+            /* Ensure the input is always visible */
+            .chat-input-container {
+                position: sticky;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                z-index: 20;
+            }
+            
+            /* Make the scrollable area adjust its size */
+            .routes-section {
+                margin-top: 10px;
+                overflow-y: auto;
+            }
         }
     </style>
 </head>
@@ -1392,20 +1456,20 @@
                     
                     <!-- Navigation Route -->
                     <svg class="route-path" viewBox="0 0 375 667" width="100%" height="100%" fill="none">
-                        <path d="M42,310 Q75,280 120,300 L200,340 Q240,360 260,330 L300,280 Q320,260 350,280 L375,300" stroke="#23b5b5" stroke-width="4" stroke-dasharray="8 4"></path>
+                        <path d="M42,310 Q75,280 120,300 L200,340 Q240,360 260,330 L300,280 Q320,260 350,280 L375,300" stroke="#23b5b5" stroke-width="4" stroke-dasharray="8 4"/>
                     </svg>
                     
                     <!-- Start and Destination Markers -->
                     <div class="route-start" style="top: 310px; left: 42px;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="#23b5b5" stroke="white" stroke-width="2"></circle>
+                            <circle cx="12" cy="12" r="10" fill="#23b5b5" stroke="white" stroke-width="2"/>
                             <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">A</text>
                         </svg>
                     </div>
                     
                     <div class="route-destination" style="top: 300px; left: 375px;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="#f5222d" stroke="white" stroke-width="2"></circle>
+                            <circle cx="12" cy="12" r="10" fill="#f5222d" stroke="white" stroke-width="2"/>
                             <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">B</text>
                         </svg>
                     </div>
@@ -1429,7 +1493,7 @@
                     
                     <!-- User / Hikers -->
                     <div class="map-user" style="top: 15%; left: 40%;" onclick="showProfile()">
-                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble right" style="top: 8%; left: 42%;">
@@ -1437,11 +1501,11 @@
                     </div>
                     
                     <div class="map-user" style="top: 25%; left: 62%;">
-                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="map-user" style="top: 40%; left: 20%;">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble left" style="top: 36%; left: 23%;">
@@ -1449,7 +1513,7 @@
                     </div>
                     
                     <div class="map-user" style="top: 50%; left: 75%;">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble left" style="top: 42%; left: 78%;">
@@ -1457,7 +1521,7 @@
                     </div>
                     
                     <div class="map-user" style="top: 60%; left: 60%;">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble left" style="top: 55%; left: 63%;">
@@ -1465,7 +1529,7 @@
                     </div>
                     
                     <div class="map-user" style="bottom: 25%; left: 30%;">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble likes left" style="bottom: 33%; left: 33%;">
@@ -1473,7 +1537,7 @@
                     </div>
                     
                     <div class="map-user" style="bottom: 15%; left: 60%;">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                     </div>
                     
                     <div class="chat-bubble likes left" style="bottom: 22%; left: 63%;">
@@ -1483,9 +1547,9 @@
                     <!-- Landmark in bottom area -->
                     <div style="position: absolute; bottom: 15%; left: 15%; z-index: 3;">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                            <rect width="40" height="40" rx="8" fill="#0cc0df" fill-opacity="0.2"></rect>
-                            <path d="M20 8L28 18H12L20 8Z" fill="#0cc0df"></path>
-                            <rect x="14" y="18" width="12" height="14" fill="#0cc0df"></rect>
+                            <rect width="40" height="40" rx="8" fill="#0cc0df" fill-opacity="0.2"/>
+                            <path d="M20 8L28 18H12L20 8Z" fill="#0cc0df"/>
+                            <rect x="14" y="18" width="12" height="14" fill="#0cc0df"/>
                         </svg>
                     </div>
                 </div>
@@ -1544,7 +1608,7 @@
                     <div class="header-left">
                         <div class="header-logo">🏆</div>
                         <div class="header-text">
-                            <div class="header-title">Events &amp; Challenges</div>
+                            <div class="header-title">Events & Challenges</div>
                             <div class="header-subtitle">Compete and earn rewards</div>
                         </div>
                     </div>
@@ -1724,7 +1788,7 @@
                         <div class="header-logo">👥</div>
                         <div class="header-text">
                             <div class="header-title">Hiking Meetups</div>
-                            <div class="header-subtitle">Join Groups &amp; Challenges</div>
+                            <div class="header-subtitle">Join Groups & Challenges</div>
                         </div>
                     </div>
                 </div>
@@ -1874,6 +1938,7 @@
                 
                 <!-- Routes Content -->
                 <div class="routes-content">
+                    <!-- Chat Container with better mobile optimization -->
                     <div class="chat-container">
                         <div class="chat-header">
                             AI Route Assistant
@@ -1907,6 +1972,11 @@
                                 Absolutely! I've created a shareable link for this route. Your friends can join by clicking the link or scanning the QR code in the app. Would you like me to suggest a meeting point and time based on weather conditions?
                             </div>
                         </div>
+                        
+                        <!-- Added scroll indicator to hint users to scroll -->
+                        <div class="scroll-indicator"></div>
+                        
+                        <!-- Fixed position input container -->
                         <div class="chat-input-container">
                             <input type="text" class="chat-field" placeholder="Ask for route recommendations...">
                             <div class="send-btn">
@@ -1915,71 +1985,40 @@
                         </div>
                     </div>
                     
-                    <div class="section-title">Recommended Routes for You</div>
-                    <div class="routes-list">
-                        <div class="route-card">
-                            <div class="route-header">
-                                <div class="route-name">Urban Cafe Tour</div>
-                                <div class="route-tag">4.5 km</div>
-                            </div>
-                            <div class="route-details">
-                                <div class="route-stats">
-                                    <div class="route-stat">
-                                        <i>⏱️</i> 60 min
-                                    </div>
-                                    <div class="route-stat">
-                                        <i>☕</i> 5 cafes
-                                    </div>
-                                    <div class="route-stat">
-                                        <i>🌳</i> 2 parks
-                                    </div>
+                    <!-- Recommended Routes Section -->
+                    <div class="routes-section">
+                        <div class="section-title">Recommended Routes for You</div>
+                        <div class="routes-list">
+                            <div class="route-card">
+                                <div class="route-header">
+                                    <div class="route-name">Urban Cafe Tour</div>
+                                    <div class="route-tag">4.5 km</div>
                                 </div>
-                                <div class="route-description">
-                                    A leisurely walk through the city center with stops at trendy cafes. Includes Lychee Park.
-                                </div>
-                                <div class="route-actions">
-                                    <div class="action-button">
-                                        <i>👁️</i> Preview
+                                <div class="route-details">
+                                    <div class="route-stats">
+                                        <div class="route-stat">
+                                            <i>⏱️</i> 60 min
+                                        </div>
+                                        <div class="route-stat">
+                                            <i>☕</i> 5 cafes
+                                        </div>
+                                        <div class="route-stat">
+                                            <i>🌳</i> 2 parks
+                                        </div>
                                     </div>
-                                    <div class="action-button">
-                                        <i>🚶</i> Start
+                                    <div class="route-description">
+                                        A leisurely walk through the city center with stops at trendy cafes. Includes Lychee Park.
                                     </div>
-                                    <div class="action-button">
-                                        <i>💾</i> Save
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="route-card">
-                            <div class="route-header">
-                                <div class="route-name">Historical City Walk</div>
-                                <div class="route-tag">5.2 km</div>
-                            </div>
-                            <div class="route-details">
-                                <div class="route-stats">
-                                    <div class="route-stat">
-                                        <i>⏱️</i> 75 min
-                                    </div>
-                                    <div class="route-stat">
-                                        <i>🏛️</i> 8 landmarks
-                                    </div>
-                                    <div class="route-stat">
-                                        <i>⭐</i> 4.8
-                                    </div>
-                                </div>
-                                <div class="route-description">
-                                    Explore the rich history of the city with this route that passes by historic buildings and cultural sites.
-                                </div>
-                                <div class="route-actions">
-                                    <div class="action-button">
-                                        <i>👁️</i> Preview
-                                    </div>
-                                    <div class="action-button">
-                                        <i>🚶</i> Start
-                                    </div>
-                                    <div class="action-button">
-                                        <i>💾</i> Save
+                                    <div class="route-actions">
+                                        <div class="action-button">
+                                            <i>👁️</i> Preview
+                                        </div>
+                                        <div class="action-button">
+                                            <i>🚶</i> Start
+                                        </div>
+                                        <div class="action-button">
+                                            <i>💾</i> Save
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2019,7 +2058,7 @@
                     <!-- Profile Header -->
                     <div class="profile-header">
                         <div class="profile-avatar">
-                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="Alex Walker">
+                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="Alex Walker">
                         </div>
                         <div class="profile-name">Alex Walker</div>
                         <div class="profile-bio">Urban hiking enthusiast. Love discovering new city perspectives and meeting fellow hikers!</div>
@@ -2095,7 +2134,7 @@
                                 </div>
                                 <div class="settings-item">
                                     <div class="settings-icon">❓</div>
-                                    <div class="settings-name">Help &amp; Support</div>
+                                    <div class="settings-name">Help & Support</div>
                                     <div class="settings-arrow">→</div>
                                 </div>
                                 <div class="settings-item">
@@ -2162,6 +2201,5 @@
             switchTab('profile-page');
         }
     </script>
-
-
-</body></html>
+</body>
+</html>
