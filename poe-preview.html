@@ -6,19 +6,26 @@
     <title>Qingye - Urban Hiking App</title>
     <style>
         :root {
-            --primary: #07C160;
-            --primary-dark: #06ad54;
-            --primary-light: #e8f7ef;
-            --secondary: #1677FF;
-            --secondary-dark: #0e5ecc;
-            --accent: #FF8C00;
+            --primary: #2ECC71;
+            --primary-dark: #27AE60;
+            --primary-light: #E8F6F0;
+            --secondary: #3498DB;
+            --secondary-dark: #2980B9;
+            --accent: #F39C12;
             --light: #F5F5F5;
             --dark: #333333;
-            --gray: #9E9E9E;
+            --gray: #95A5A6;
             --white: #FFFFFF;
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             --border-radius: 12px;
             --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            
+            /* Group colors */
+            --group-runners: #E74C3C;
+            --group-cyclists: #3498DB;
+            --group-hikers: #2ECC71;
+            --group-photographers: #9B59B6;
+            --group-cafe: #F39C12;
         }
         
         * {
@@ -29,7 +36,7 @@
         }
         
         body {
-            background-color: #001029;
+            background-color: #F0FFF4;
             color: var(--dark);
             line-height: 1.6;
             overflow-x: hidden;
@@ -44,7 +51,7 @@
             position: relative;
             width: 100%;
             height: 100%;
-            background-color: #001029;
+            background-color: #F0FFF4;
             overflow: hidden;
         }
         
@@ -79,7 +86,8 @@
             padding: 15px;
             display: flex;
             align-items: center;
-            background-color: rgba(0, 16, 41, 0.5);
+            justify-content: space-between;
+            background-color: rgba(46, 204, 113, 0.9);
             z-index: 5;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -94,12 +102,12 @@
             width: 36px;
             height: 36px;
             border-radius: 18px;
-            background-color: #23b5b5;
+            background-color: var(--white);
             margin-right: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--primary);
             font-size: 20px;
         }
         
@@ -114,7 +122,18 @@
         
         .header-subtitle {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
         }
         
         /* Location Bar */
@@ -125,7 +144,7 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
-            background-color: rgba(0, 16, 41, 0.3);
+            background-color: rgba(46, 204, 113, 0.7);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             z-index: 5;
@@ -134,7 +153,7 @@
         .location-info {
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
             padding: 5px 12px;
             border-radius: 20px;
         }
@@ -143,7 +162,7 @@
             width: 24px;
             height: 24px;
             border-radius: 12px;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -156,8 +175,8 @@
         }
         
         .follow-button {
-            background-color: #08979d;
-            color: white;
+            background-color: var(--white);
+            color: var(--primary);
             border: none;
             padding: 5px 12px;
             border-radius: 20px;
@@ -205,7 +224,7 @@
         
         .map-route {
             position: absolute;
-            border: 2px dashed #23b5b5;
+            border: 2px dashed var(--primary);
             z-index: 2;
             border-radius: 10px;
         }
@@ -213,10 +232,10 @@
         .route-path {
             position: absolute;
             z-index: 2;
-            stroke: #23b5b5;
+            stroke: var(--primary);
             stroke-width: 4;
             stroke-dasharray: 8 4;
-            filter: drop-shadow(0 0 3px rgba(35, 181, 181, 0.6));
+            filter: drop-shadow(0 0 3px rgba(46, 204, 113, 0.6));
         }
         
         .route-destination {
@@ -239,9 +258,9 @@
             left: 10%;
             width: 70%;
             height: 40%;
-            background-color: #0cc0df;
+            background-color: rgba(46, 204, 113, 0.4);
             border-radius: 50%;
-            filter: blur(20px);
+            filter: blur(50px);
             opacity: 0.4;
             z-index: 1;
         }
@@ -252,16 +271,16 @@
             right: 10%;
             width: 65%;
             height: 50%;
-            background-color: #0c4cd3;
+            background-color: rgba(52, 152, 219, 0.4);
             border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
-            filter: blur(20px);
+            filter: blur(50px);
             opacity: 0.4;
             z-index: 1;
         }
         
         .cloud {
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             z-index: 2;
         }
@@ -280,12 +299,50 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             overflow: hidden;
+            border: 3px solid transparent;
         }
         
         .map-user img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .map-user.runners {
+            border-color: var(--group-runners);
+        }
+        
+        .map-user.cyclists {
+            border-color: var(--group-cyclists);
+        }
+        
+        .map-user.hikers {
+            border-color: var(--group-hikers);
+        }
+        
+        .map-user.photographers {
+            border-color: var(--group-photographers);
+        }
+        
+        .map-user.cafe {
+            border-color: var(--group-cafe);
+        }
+        
+        .map-user-activity {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            border-radius: 11px;
+            background-color: #f5222d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            border: 2px solid #fff;
+            z-index: 5;
         }
         
         .chat-bubble {
@@ -313,6 +370,90 @@
             align-items: center;
             gap: 5px;
             color: #f5222d;
+        }
+        
+        .chat-interactions {
+            position: absolute;
+            bottom: -28px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .chat-bubble:hover .chat-interactions {
+            opacity: 1;
+        }
+        
+        .chat-action {
+            background-color: rgba(46, 204, 113, 0.9);
+            color: white;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .chat-action i {
+            margin-right: 3px;
+        }
+        
+        .audio-bubble {
+            position: absolute;
+            background-color: rgba(46, 204, 113, 0.9);
+            padding: 8px 12px;
+            border-radius: 16px;
+            color: white;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .wave-bar {
+            width: 2px;
+            height: 12px;
+            background-color: white;
+            border-radius: 1px;
+            animation: waveAnim 0.8s infinite ease-in-out;
+        }
+        
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+            height: 16px;
+        }
+        
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+            height: 10px;
+        }
+        
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+            height: 14px;
+        }
+        
+        @keyframes waveAnim {
+            0%, 100% {
+                transform: scaleY(1);
+            }
+            50% {
+                transform: scaleY(0.5);
+            }
         }
         
         .location-pin {
@@ -345,7 +486,7 @@
         
         .navigation-instruction {
             position: absolute;
-            background-color: rgba(35, 181, 181, 0.85);
+            background-color: rgba(46, 204, 113, 0.9);
             color: white;
             padding: 10px 15px;
             border-radius: 8px;
@@ -368,19 +509,526 @@
         }
         
         .instruction-distance {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 12px;
             margin-top: 2px;
         }
         
+        /* Map Toolbar */
+        .map-toolbar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 5;
+        }
+        
+        .map-tool {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+        
+        .map-tool.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Nearby Users Panel */
+        .nearby-panel {
+            position: absolute;
+            bottom: 80px;
+            left: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 6;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nearby-panel.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .nearby-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .nearby-title {
+            color: var(--dark);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .nearby-close {
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .nearby-users {
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .nearby-user {
+            display: flex;
+            align-items: center;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .nearby-user:hover {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+        
+        .nearby-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 21px;
+            margin-right: 12px;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+        }
+        
+        .nearby-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .nearby-info {
+            flex: 1;
+        }
+        
+        .nearby-name {
+            color: var(--dark);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .nearby-activity {
+            color: var(--gray);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .activity-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            background-color: #52c41a;
+        }
+        
+        .nearby-distance {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .nearby-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nearby-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .action-chat {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .action-join {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        /* Virtual Hike Panel */
+        .virtual-hike-panel {
+            position: absolute;
+            bottom: 80px;
+            left: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 6;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .virtual-hike-panel.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .virtual-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .virtual-title {
+            color: var(--dark);
+            font-size: 16px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .virtual-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .virtual-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .virtual-stat {
+            flex: 1;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            color: var(--dark);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 12px;
+        }
+        
+        .virtual-progress {
+            margin-bottom: 15px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-label {
+            color: var(--gray);
+            font-size: 12px;
+        }
+        
+        .progress-info {
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: rgba(46, 204, 113, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .virtual-participants {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .virtual-participant {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60px;
+        }
+        
+        .participant-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 21px;
+            overflow: hidden;
+            margin-bottom: 5px;
+            position: relative;
+            border: 2px solid var(--primary);
+        }
+        
+        .participant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .participant-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            border: 2px solid white;
+        }
+        
+        .status-active {
+            background-color: #52c41a;
+        }
+        
+        .status-paused {
+            background-color: #fa8c16;
+        }
+        
+        .participant-name {
+            color: var(--dark);
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        
+        .virtual-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .virtual-action {
+            flex: 1;
+            height: 44px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .action-talk {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .action-leave {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--dark);
+        }
+        
+        /* Circle Mode Panel */
+        .circle-panel {
+            position: absolute;
+            bottom: 80px;
+            left: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 6;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .circle-panel.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .circle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .circle-title {
+            color: var(--dark);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .circle-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .circle-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .circle-tab {
+            padding: 8px 15px;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 20px;
+            color: var(--dark);
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .circle-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .circle-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .circle-item {
+            display: flex;
+            align-items: center;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+        }
+        
+        .circle-item:hover {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+        
+        .circle-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 21px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+        
+        .circle-info {
+            flex: 1;
+        }
+        
+        .circle-name {
+            color: var(--dark);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .circle-details {
+            color: var(--gray);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .circle-members {
+            display: flex;
+            align-items: center;
+        }
+        
+        .circle-action {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
         /* Footer */
         .hiking-footer {
-            background-color: rgba(0, 16, 41, 0.5);
-            color: white;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
             padding: 10px 15px;
             z-index: 5;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .hiking-stats {
@@ -397,26 +1045,27 @@
         .stat-amount {
             font-size: 18px;
             font-weight: bold;
+            color: var(--dark);
         }
         
         .stat-label {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
         }
         
         .map-input-container {
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            background-color: rgba(0, 16, 41, 0.7);
+            background-color: rgba(255, 255, 255, 0.8);
             margin-top: 5px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .map-input-field {
             flex: 1;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--dark);
             border: none;
             border-radius: 20px;
             padding: 12px 15px;
@@ -424,20 +1073,35 @@
         }
         
         .map-input-field::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.4);
         }
         
-        .map-send-btn {
+        .map-input-actions {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+        
+        .map-input-action {
             width: 40px;
             height: 40px;
             border-radius: 20px;
-            background-color: #23b5b5;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .map-send-btn {
+            background-color: var(--primary);
             color: white;
-            margin-left: 10px;
-            font-size: 20px;
+        }
+        
+        .map-audio-btn {
+            background-color: var(--accent);
+            color: white;
         }
         
         /* Tab Bar */
@@ -445,10 +1109,11 @@
             display: flex;
             justify-content: space-around;
             height: 50px;
-            background-color: rgba(0, 16, 41, 0.9);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
         }
         
         .tab {
@@ -456,14 +1121,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--gray);
             font-size: 10px;
             width: 20%;
             cursor: pointer;
         }
         
         .tab.active {
-            color: #23b5b5;
+            color: var(--primary);
         }
         
         .tab-icon {
@@ -473,7 +1138,7 @@
         
         /* Meetups Page */
         .meetups-page {
-            background-color: #001029;
+            background-color: #F0FFF4;
         }
         
         .meetups-content {
@@ -484,10 +1149,18 @@
         }
         
         .section-title {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
             margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section-action {
+            color: var(--primary);
+            font-size: 12px;
         }
         
         .events-scroll {
@@ -505,14 +1178,15 @@
         
         .event-card {
             min-width: 220px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .event-image {
             height: 120px;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             position: relative;
             display: flex;
             align-items: center;
@@ -538,7 +1212,7 @@
         }
         
         .event-title {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
@@ -547,20 +1221,20 @@
         .event-info {
             display: flex;
             gap: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 12px;
             margin-bottom: 12px;
         }
         
         .event-description {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
             font-size: 13px;
             line-height: 1.5;
             margin-bottom: 15px;
         }
         
         .join-button {
-            background-color: #08979d;
+            background-color: var(--primary);
             color: white;
             border: none;
             padding: 8px 16px;
@@ -578,10 +1252,11 @@
         }
         
         .challenge-card {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
             display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .challenge-icon {
@@ -589,8 +1264,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(35, 181, 181, 0.3);
-            color: #23b5b5;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--primary);
             font-size: 24px;
         }
         
@@ -600,7 +1275,7 @@
         }
         
         .challenge-title {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 5px;
@@ -609,14 +1284,14 @@
         .challenge-stats {
             display: flex;
             gap: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 12px;
             margin-bottom: 8px;
         }
         
         .progress-bar {
             height: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(46, 204, 113, 0.2);
             border-radius: 3px;
             margin-bottom: 10px;
             overflow: hidden;
@@ -624,7 +1299,7 @@
         
         .progress-fill {
             height: 100%;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             border-radius: 3px;
         }
         
@@ -650,13 +1325,13 @@
         }
         
         .badge.locked {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--gray);
         }
         
         /* Routes Page */
         .routes-page {
-            background-color: #001029;
+            background-color: #F0FFF4;
         }
         
         .routes-content {
@@ -669,12 +1344,12 @@
         }
         
         .chat-container {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px; /* Reduced margin */
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(35, 181, 181, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(46, 204, 113, 0.3);
             display: flex;
             flex-direction: column;
             /* Instead of fixed height, use min-height and flex properties */
@@ -684,12 +1359,12 @@
         
         .chat-header {
             padding: 15px;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             color: white;
             font-weight: 600;
             font-size: 18px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             /* Added position sticky to keep it visible */
             position: sticky;
             top: 0;
@@ -723,15 +1398,15 @@
         
         .message.user {
             align-self: flex-end;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             color: white;
             border-bottom-right-radius: 4px;
         }
         
         .message.bot {
             align-self: flex-start;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: white;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--dark);
             border-bottom-left-radius: 4px;
         }
         
@@ -739,8 +1414,8 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: white;
             /* Added position sticky to keep it at the bottom */
             position: sticky;
             bottom: 0;
@@ -751,15 +1426,15 @@
             flex: 1;
             border: none;
             outline: none;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(46, 204, 113, 0.1);
             padding: 12px 15px;
             border-radius: 24px;
             font-size: 14px;
-            color: white;
+            color: var(--dark);
         }
         
         .chat-field::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.4);
         }
         
         .send-btn {
@@ -767,13 +1442,13 @@
             width: 40px;
             height: 40px;
             border-radius: 20px;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         .routes-section {
@@ -787,9 +1462,10 @@
         }
         
         .route-card {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .route-header {
@@ -797,18 +1473,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .route-name {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
         }
         
         .route-tag {
-            background-color: rgba(35, 181, 181, 0.3);
-            color: #23b5b5;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--primary);
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 12px;
@@ -829,12 +1505,12 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 12px;
         }
         
         .route-description {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
             font-size: 13px;
             line-height: 1.5;
             margin-bottom: 15px;
@@ -842,7 +1518,7 @@
         
         .route-actions {
             display: flex;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
             padding-top: 12px;
         }
         
@@ -854,11 +1530,11 @@
             gap: 5px;
             padding: 8px 0;
             font-size: 12px;
-            color: #23b5b5;
+            color: var(--primary);
         }
         
         .action-button:not(:last-child) {
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         /* Added scroll indicator for chat */
@@ -866,13 +1542,13 @@
             width: 40px;
             height: 4px;
             border-radius: 2px;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(0, 0, 0, 0.1);
             margin: 5px auto;
         }
         
         /* Events Page */
         .events-page {
-            background-color: #001029;
+            background-color: #F0FFF4;
         }
         
         .events-content {
@@ -883,15 +1559,16 @@
         }
         
         .featured-event {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .featured-image {
             height: 140px;
-            background-color: #001029;
+            background-color: var(--primary);
             position: relative;
             display: flex;
             align-items: center;
@@ -904,7 +1581,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -914,13 +1591,14 @@
             width: 70px;
             height: 70px;
             border-radius: 35px;
-            background-color: black;
+            background-color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--primary);
             font-size: 24px;
             font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
         
         .featured-content {
@@ -928,14 +1606,14 @@
         }
         
         .featured-title {
-            color: white;
+            color: var(--dark);
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
         }
         
         .event-date {
-            color: #ff7a45;
+            color: var(--accent);
             font-weight: 500;
             margin-bottom: 10px;
             font-size: 13px;
@@ -945,21 +1623,21 @@
         }
         
         .featured-description {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
             font-size: 13px;
             line-height: 1.5;
             margin-bottom: 15px;
         }
         
         .reward-section {
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(46, 204, 113, 0.05);
             padding: 12px 15px;
             border-radius: 12px;
             margin-bottom: 15px;
         }
         
         .reward-title {
-            color: white;
+            color: var(--dark);
             font-weight: 600;
             margin-bottom: 10px;
             font-size: 14px;
@@ -974,13 +1652,14 @@
         }
         
         .reward-item {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 8px;
             padding: 10px;
             text-align: center;
             font-size: 11px;
             width: 70px;
-            color: white;
+            color: var(--dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .reward-icon {
@@ -993,7 +1672,7 @@
         }
         
         .participants-title {
-            color: white;
+            color: var(--dark);
             font-weight: 600;
             margin-bottom: 10px;
             font-size: 14px;
@@ -1015,14 +1694,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary);
             font-weight: 500;
             font-size: 12px;
         }
         
         .register-button {
-            background-color: #23b5b5;
+            background-color: var(--primary);
             color: white;
             border: none;
             padding: 12px;
@@ -1041,29 +1720,31 @@
         }
         
         .upcoming-card {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             overflow: hidden;
             display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .upcoming-image {
             width: 70px;
-            background-color: rgba(35, 181, 181, 0.3);
+            background-color: rgba(46, 204, 113, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #23b5b5;
+            color: var(--primary);
             font-size: 22px;
             font-weight: bold;
         }
         
         /* Leaderboard Section */
         .leaderboard-section {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: white;
             border-radius: 16px;
             padding: 15px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .leaderboard-header {
@@ -1074,13 +1755,13 @@
         }
         
         .leaderboard-title {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
         }
         
         .your-rank {
-            background-color: #23b5b5;
+            background-color: var(--primary);
             color: white;
             padding: 5px 10px;
             border-radius: 12px;
@@ -1098,18 +1779,18 @@
             display: flex;
             align-items: center;
             padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(46, 204, 113, 0.05);
             border-radius: 10px;
         }
         
         .rank-item.you {
-            background-color: rgba(35, 181, 181, 0.2);
-            border: 1px solid rgba(35, 181, 181, 0.5);
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.3);
         }
         
         .ellipsis-row {
             text-align: center;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--gray);
             font-size: 16px;
             letter-spacing: 3px;
             margin: 5px 0;
@@ -1119,8 +1800,8 @@
             width: 36px;
             height: 36px;
             border-radius: 18px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1148,27 +1829,64 @@
         }
         
         .rank-name {
-            color: white;
+            color: var(--dark);
             font-weight: 500;
             font-size: 14px;
             margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .rank-group {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .rank-group.runners {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--group-runners);
+        }
+        
+        .rank-group.cyclists {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--group-cyclists);
+        }
+        
+        .rank-group.hikers {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--group-hikers);
+        }
+        
+        .rank-group.photographers {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--group-photographers);
+        }
+        
+        .rank-group.cafe {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--group-cafe);
         }
         
         .rank-stats {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 12px;
         }
         
         .rank-score {
             font-size: 16px;
             font-weight: 600;
-            color: white;
+            color: var(--primary);
             margin-left: auto;
         }
         
         /* Profile Page */
         .profile-page {
-            background-color: #001029;
+            background-color: #F0FFF4;
         }
         
         .profile-content {
@@ -1179,7 +1897,7 @@
         
         .profile-header {
             padding: 30px 20px 20px;
-            background: linear-gradient(to bottom, rgba(35, 181, 181, 0.3), transparent);
+            background: linear-gradient(to bottom, rgba(46, 204, 113, 0.2), transparent);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1190,7 +1908,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background-color: #23b5b5;
+            background-color: var(--primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -1198,8 +1916,9 @@
             color: white;
             font-size: 40px;
             font-weight: bold;
-            border: 4px solid rgba(255, 255, 255, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.5);
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         
         .profile-avatar img {
@@ -1209,14 +1928,14 @@
         }
         
         .profile-name {
-            color: white;
+            color: var(--dark);
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 5px;
         }
         
         .profile-bio {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 14px;
             max-width: 250px;
             margin-bottom: 15px;
@@ -1236,23 +1955,24 @@
         }
         
         .stat-value {
-            color: white;
+            color: var(--dark);
             font-size: 18px;
             font-weight: 600;
         }
         
         .stat-name {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             font-size: 12px;
         }
         
         .profile-edit-button {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--primary);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: none;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 13px;
+            font-weight: 500;
         }
         
         .profile-sections {
@@ -1269,17 +1989,17 @@
             align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .section-title {
-            color: white;
+            color: var(--dark);
             font-size: 16px;
             font-weight: 600;
         }
         
         .section-action {
-            color: #23b5b5;
+            color: var(--primary);
             font-size: 13px;
         }
         
@@ -1301,7 +2021,7 @@
             width: 50px;
             height: 50px;
             border-radius: 25px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(46, 204, 113, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1310,7 +2030,7 @@
         }
         
         .achievement-name {
-            color: white;
+            color: var(--dark);
             font-size: 11px;
             line-height: 1.3;
         }
@@ -1325,31 +2045,292 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: white;
             border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .settings-icon {
             width: 36px;
             height: 36px;
             border-radius: 18px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(46, 204, 113, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
             font-size: 18px;
-            color: white;
+            color: var(--primary);
         }
         
         .settings-name {
             flex: 1;
-            color: white;
+            color: var(--dark);
             font-size: 14px;
         }
         
         .settings-arrow {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--gray);
+        }
+        
+        /* Friends Page */
+        .friends-page {
+            background-color: #F0FFF4;
+        }
+        
+        .friends-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .friends-search {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .friends-search-icon {
+            color: var(--gray);
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .friends-search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        .friends-search-input::placeholder {
+            color: var(--gray);
+        }
+        
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .friend-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .friend-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin-right: 12px;
+            border: 2px solid transparent;
+        }
+        
+        .friend-avatar.runners {
+            border-color: var(--group-runners);
+        }
+        
+        .friend-avatar.cyclists {
+            border-color: var(--group-cyclists);
+        }
+        
+        .friend-avatar.hikers {
+            border-color: var(--group-hikers);
+        }
+        
+        .friend-avatar.photographers {
+            border-color: var(--group-photographers);
+        }
+        
+        .friend-avatar.cafe {
+            border-color: var(--group-cafe);
+        }
+        
+        .friend-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .friend-group {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .friend-group.runners {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--group-runners);
+        }
+        
+        .friend-group.cyclists {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--group-cyclists);
+        }
+        
+        .friend-group.hikers {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--group-hikers);
+        }
+        
+        .friend-group.photographers {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--group-photographers);
+        }
+        
+        .friend-group.cafe {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--group-cafe);
+        }
+        
+        .friend-status {
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+        }
+        
+        .status-dot.online {
+            background-color: #52c41a;
+        }
+        
+        .status-dot.offline {
+            background-color: var(--gray);
+        }
+        
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .friend-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary);
+        }
+        
+        .friend-section {
+            margin-bottom: 20px;
+        }
+        
+        .group-chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .group-chat-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .group-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .group-avatar.runners {
+            background-color: var(--group-runners);
+        }
+        
+        .group-avatar.cyclists {
+            background-color: var(--group-cyclists);
+        }
+        
+        .group-avatar.hikers {
+            background-color: var(--group-hikers);
+        }
+        
+        .group-avatar.photographers {
+            background-color: var(--group-photographers);
+        }
+        
+        .group-avatar.cafe {
+            background-color: var(--group-cafe);
+        }
+        
+        .group-info {
+            flex: 1;
+        }
+        
+        .group-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .group-status {
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .group-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background-color: var(--primary);
+            color: white;
         }
         
         /* For mobile */
@@ -1395,7 +2376,7 @@
             .chat-input-container {
                 position: sticky;
                 bottom: 0;
-                background-color: rgba(0, 0, 0, 0.5);
+                background-color: white;
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 z-index: 20;
@@ -1405,6 +2386,10 @@
             .routes-section {
                 margin-top: 10px;
                 overflow-y: auto;
+            }
+            
+            .nearby-panel, .virtual-hike-panel, .circle-panel {
+                max-height: 70vh;
             }
         }
     </style>
@@ -1424,6 +2409,10 @@
                             <div class="header-subtitle">Qingye for Urban Explorers</div>
                         </div>
                     </div>
+                    <div class="header-right">
+                        <div class="header-icon" onclick="toggleCirclePanel()">👥</div>
+                        <div class="header-icon" onclick="toggleVirtualHike()">🎧</div>
+                    </div>
                 </div>
                 
                 <!-- Location Bar -->
@@ -1442,7 +2431,7 @@
                     <!-- Map Background -->
                     <div class="map-background">
                         <!-- City map background -->
-                        <img class="map-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjgwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIENpdHkgc3RyZWV0cyAtLT4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjgwMCIgZmlsbD0iIzAwMjI1MCIvPgogIAogIDwhLS0gTWFpbiBzdHJlZXRzIC0tPgogIDxsaW5lIHgxPSIzMDAiIHkxPSIwIiB4Mj0iMzAwIiB5Mj0iODAwIiBzdHJva2U9IiMzMzRkNjYiIHN0cm9rZS13aWR0aD0iMjAiLz4KICA8bGluZSB4MT0iMCIgeTE9IjIwMCIgeDI9IjYwMCIgeTI9IjIwMCIgc3Ryb2tlPSIjMzM0ZDY2IiBzdHJva2Utd2lkdGg9IjIwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSI0MDAiIHgyPSI2MDAiIHkyPSI0MDAiIHN0cm9rZT0iIzMzNGQ2NiIgc3Ryb2tlLXdpZHRoPSIyMCIvPgogIDxsaW5lIHgxPSIwIiB5MT0iNjAwIiB4Mj0iNjAwIiB5Mj0iNjAwIiBzdHJva2U9IiMzMzRkNjYiIHN0cm9rZS13aWR0aD0iMjAiLz4KICA8bGluZSB4MT0iMTUwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjgwMCIgc3Ryb2tlPSIjMzM0ZDY2IiBzdHJva2Utd2lkdGg9IjE1Ii8+CiAgPGxpbmUgeDE9IjQ1MCIgeTE9IjAiIHgyPSI0NTAiIHkyPSI4MDAiIHN0cm9rZT0iIzMzNGQ2NiIgc3Ryb2tlLXdpZHRoPSIxNSIvPgogIAogIDwhLS0gU21hbGxlciBzdHJlZXRzIC0tPgogIDxsaW5lIHgxPSI3NSIgeTE9IjAiIHgyPSI3NSIgeTI9IjgwMCIgc3Ryb2tlPSIjMzM0ZDY2IiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjIyNSIgeTE9IjAiIHgyPSIyMjUiIHkyPSI4MDAiIHN0cm9rZT0iIzMzNGQ2NiIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIDxsaW5lIHgxPSIzNzUiIHkxPSIwIiB4Mj0iMzc1IiB5Mj0iODAwIiBzdHJva2U9IiMzMzRkNjYiIHN0cm9rZS13aWR0aD0iMTAiLz4KICA8bGluZSB4MT0iNTI1IiB5MT0iMCIgeDI9IjUyNSIgeTI9IjgwMCIgc3Ryb2tlPSIjMzM0ZDY2IiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSIxMDAiIHgyPSI2MDAiIHkyPSIxMDAiIHN0cm9rZT0iIzMzNGQ2NiIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIDxsaW5lIHgxPSIwIiB5MT0iMzAwIiB4Mj0iNjAwIiB5Mj0iMzAwIiBzdHJva2U9IiMzMzRkNjYiIHN0cm9rZS13aWR0aD0iMTAiLz4KICA8bGluZSB4MT0iMCIgeTE9IjUwMCIgeDI9IjYwMCIgeTI9IjUwMCIgc3Ryb2tlPSIjMzM0ZDY2IiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSI3MDAiIHgyPSI2MDAiIHkyPSI3MDAiIHN0cm9rZT0iIzMzNGQ2NiIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIAogIDwhLS0gQmxvY2tzIC0tPgogIDxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjIxMCIgeT0iMTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIzMTAiIHk9IjEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDcwIiB5PSIxMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjgwIiB5PSIxMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIxNjAiIHk9IjExMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjMyMCIgeT0iMTEwIiB3aWR0aD0iNDUiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNTMwIiB5PSIxMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIxMCIgeT0iMjEwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjE2MCIgeT0iMjEwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjQxMCIgeT0iMjEwIiB3aWR0aD0iNzAiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjMxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjE2MCIgeT0iMzEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMjQwIiB5PSIzMTAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIzMTAiIHk9IjMxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjM4MCIgeT0iMzEwIiB3aWR0aD0iNjAiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDYwIiB5PSIzMTAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSI1MzAiIHk9IjMxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjgwIiB5PSI0MTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIxNjAiIHk9IjQxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjIzMCIgeT0iNDEwIiB3aWR0aD0iNTAiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMzIwIiB5PSI0MTAiIHdpZHRoPSI0NSIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSI1MzAiIHk9IjQxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgogIDxyZWN0IHg9IjEwIiB5PSI1MTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMTYwIiB5PSI1MTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDEwIiB5PSI1MTAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzNGQ2NiIgcng9IjIiLz4KICA8cmVjdCB4PSIxMCIgeT0iNjEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiMzMzRkNjYiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iODAiIHk9IjYxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzM0ZDY2IiByeD0iMiIvPgo8L3N2Zz4=" alt="City Map">
+                        <img class="map-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjgwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIENpdHkgc3RyZWV0cyAtLT4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjgwMCIgZmlsbD0iI0YwRkZGNCIvPgogIAogIDwhLS0gTWFpbiBzdHJlZXRzIC0tPgogIDxsaW5lIHgxPSIzMDAiIHkxPSIwIiB4Mj0iMzAwIiB5Mj0iODAwIiBzdHJva2U9IiNFOEY2RjAiIHN0cm9rZS13aWR0aD0iMjAiLz4KICA8bGluZSB4MT0iMCIgeTE9IjIwMCIgeDI9IjYwMCIgeTI9IjIwMCIgc3Ryb2tlPSIjRThGNkYwIiBzdHJva2Utd2lkdGg9IjIwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSI0MDAiIHgyPSI2MDAiIHkyPSI0MDAiIHN0cm9rZT0iI0U4RjZGMCIgc3Ryb2tlLXdpZHRoPSIyMCIvPgogIDxsaW5lIHgxPSIwIiB5MT0iNjAwIiB4Mj0iNjAwIiB5Mj0iNjAwIiBzdHJva2U9IiNFOEY2RjAiIHN0cm9rZS13aWR0aD0iMjAiLz4KICA8bGluZSB4MT0iMTUwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjgwMCIgc3Ryb2tlPSIjRThGNkYwIiBzdHJva2Utd2lkdGg9IjE1Ii8+CiAgPGxpbmUgeDE9IjQ1MCIgeTE9IjAiIHgyPSI0NTAiIHkyPSI4MDAiIHN0cm9rZT0iI0U4RjZGMCIgc3Ryb2tlLXdpZHRoPSIxNSIvPgogIAogIDwhLS0gU21hbGxlciBzdHJlZXRzIC0tPgogIDxsaW5lIHgxPSI3NSIgeTE9IjAiIHgyPSI3NSIgeTI9IjgwMCIgc3Ryb2tlPSIjRThGNkYwIiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjIyNSIgeTE9IjAiIHgyPSIyMjUiIHkyPSI4MDAiIHN0cm9rZT0iI0U4RjZGMCIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIDxsaW5lIHgxPSIzNzUiIHkxPSIwIiB4Mj0iMzc1IiB5Mj0iODAwIiBzdHJva2U9IiNFOEY2RjAiIHN0cm9rZS13aWR0aD0iMTAiLz4KICA8bGluZSB4MT0iNTI1IiB5MT0iMCIgeDI9IjUyNSIgeTI9IjgwMCIgc3Ryb2tlPSIjRThGNkYwIiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSIxMDAiIHgyPSI2MDAiIHkyPSIxMDAiIHN0cm9rZT0iI0U4RjZGMCIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIDxsaW5lIHgxPSIwIiB5MT0iMzAwIiB4Mj0iNjAwIiB5Mj0iMzAwIiBzdHJva2U9IiNFOEY2RjAiIHN0cm9rZS13aWR0aD0iMTAiLz4KICA8bGluZSB4MT0iMCIgeTE9IjUwMCIgeDI9IjYwMCIgeTI9IjUwMCIgc3Ryb2tlPSIjRThGNkYwIiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGxpbmUgeDE9IjAiIHkxPSI3MDAiIHgyPSI2MDAiIHkyPSI3MDAiIHN0cm9rZT0iI0U4RjZGMCIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIAogIDwhLS0gQmxvY2tzIC0tPgogIDxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjIxMCIgeT0iMTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIzMTAiIHk9IjEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDcwIiB5PSIxMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjgwIiB5PSIxMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIxNjAiIHk9IjExMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjMyMCIgeT0iMTEwIiB3aWR0aD0iNDUiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNTMwIiB5PSIxMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIxMCIgeT0iMjEwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjE2MCIgeT0iMjEwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjQxMCIgeT0iMjEwIiB3aWR0aD0iNzAiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjMxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjE2MCIgeT0iMzEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMjQwIiB5PSIzMTAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIzMTAiIHk9IjMxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjM4MCIgeT0iMzEwIiB3aWR0aD0iNjAiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDYwIiB5PSIzMTAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSI1MzAiIHk9IjMxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjgwIiB5PSI0MTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIxNjAiIHk9IjQxMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjIzMCIgeT0iNDEwIiB3aWR0aD0iNTAiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMzIwIiB5PSI0MTAiIHdpZHRoPSI0NSIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSI1MzAiIHk9IjQxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgogIDxyZWN0IHg9IjEwIiB5PSI1MTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iMTYwIiB5PSI1MTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iNDEwIiB5PSI1MTAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0U4RjZGMCIgcng9IjIiLz4KICA8cmVjdCB4PSIxMCIgeT0iNjEwIiB3aWR0aD0iNTUiIGhlaWdodD0iODAiIGZpbGw9IiNFOEY2RjAiIHJ4PSIyIi8+CiAgPHJlY3QgeD0iODAiIHk9IjYxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRThGNkYwIiByeD0iMiIvPgo8L3N2Zz4=" alt="City Map">
                         
                         <div class="map-blob-1"></div>
                         <div class="map-blob-2"></div>
@@ -1454,22 +2443,30 @@
                         <div class="cloud" style="bottom: 15%; right: 25%; width: 35px; height: 22px;"></div>
                     </div>
                     
+                    <!-- Map Toolbar -->
+                    <div class="map-toolbar">
+                        <div class="map-tool" onclick="toggleNearbyUsers()">👥</div>
+                        <div class="map-tool" onclick="toggleVirtualHike()">🚶</div>
+                        <div class="map-tool" onclick="toggleAudioMode()">🎧</div>
+                        <div class="map-tool" onclick="toggleCirclePanel()">🔍</div>
+                    </div>
+                    
                     <!-- Navigation Route -->
                     <svg class="route-path" viewBox="0 0 375 667" width="100%" height="100%" fill="none">
-                        <path d="M42,310 Q75,280 120,300 L200,340 Q240,360 260,330 L300,280 Q320,260 350,280 L375,300" stroke="#23b5b5" stroke-width="4" stroke-dasharray="8 4"/>
+                        <path d="M42,310 Q75,280 120,300 L200,340 Q240,360 260,330 L300,280 Q320,260 350,280 L375,300" stroke="#2ECC71" stroke-width="4" stroke-dasharray="8 4"/>
                     </svg>
                     
                     <!-- Start and Destination Markers -->
                     <div class="route-start" style="top: 310px; left: 42px;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="#23b5b5" stroke="white" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="10" fill="#2ECC71" stroke="white" stroke-width="2"/>
                             <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">A</text>
                         </svg>
                     </div>
                     
                     <div class="route-destination" style="top: 300px; left: 375px;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="#f5222d" stroke="white" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="10" fill="#E74C3C" stroke="white" stroke-width="2"/>
                             <text x="12" y="16" text-anchor="middle" fill="white" style="font-size: 10px; font-weight: bold;">B</text>
                         </svg>
                     </div>
@@ -1491,66 +2488,357 @@
                         <div class="map-route" style="top: 70px; left: 170px; width: 100px; height: 100px; border-radius: 50px; border-style: dotted;"></div>
                     </div>
                     
-                    <!-- User / Hikers -->
-                    <div class="map-user" style="top: 15%; left: 40%;" onclick="showProfile()">
+                    <!-- User / Hikers with Group Color Coding -->
+                    <div class="map-user hikers" style="top: 15%; left: 40%;" onclick="showProfile()">
                         <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🚶</div>
                     </div>
                     
                     <div class="chat-bubble right" style="top: 8%; left: 42%;">
                         Lost!
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 2</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
                     </div>
                     
-                    <div class="map-user" style="top: 25%; left: 62%;">
+                    <div class="map-user runners" style="top: 25%; left: 62%;">
                         <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🏃</div>
                     </div>
                     
-                    <div class="map-user" style="top: 40%; left: 20%;">
+                    <div class="map-user cyclists" style="top: 40%; left: 20%;">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🚴</div>
                     </div>
                     
                     <div class="chat-bubble left" style="top: 36%; left: 23%;">
                         Ava Hiker <br>Just cool
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 5</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
                     </div>
                     
-                    <div class="map-user" style="top: 50%; left: 75%;">
+                    <div class="audio-bubble" style="top: 35%; left: 55%;" onclick="playAudio()">
+                        <div>🎧</div>
+                        <div class="audio-wave">
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                        </div>
+                        <div>0:15</div>
+                    </div>
+                    
+                    <div class="map-user hikers" style="top: 50%; left: 75%;">
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🚶</div>
                     </div>
                     
                     <div class="chat-bubble left" style="top: 42%; left: 78%;">
                         Lazy Day
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 3</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
                     </div>
                     
-                    <div class="map-user" style="top: 60%; left: 60%;">
+                    <div class="map-user cyclists" style="top: 60%; left: 60%;">
                         <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🚴</div>
                     </div>
                     
                     <div class="chat-bubble left" style="top: 55%; left: 63%;">
                         Ava too!
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 1</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
                     </div>
                     
-                    <div class="map-user" style="bottom: 25%; left: 30%;">
+                    <div class="map-user cafe" style="bottom: 25%; left: 30%;">
                         <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🚶</div>
                     </div>
                     
                     <div class="chat-bubble likes left" style="bottom: 33%; left: 33%;">
                         <span>❤️</span> Mom!
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 8</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
                     </div>
                     
-                    <div class="map-user" style="bottom: 15%; left: 60%;">
+                    <div class="map-user photographers" style="bottom: 15%; left: 60%;">
                         <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                        <div class="map-user-activity">🏃</div>
                     </div>
                     
                     <div class="chat-bubble likes left" style="bottom: 22%; left: 63%;">
                         <span>❤️</span> Pause
+                        <div class="chat-interactions">
+                            <div class="chat-action"><i>❤️</i> 4</div>
+                            <div class="chat-action"><i>💬</i> Reply</div>
+                        </div>
+                    </div>
+                    
+                    <div class="audio-bubble" style="bottom: 30%; right: 15%;" onclick="playAudio()">
+                        <div>🎧</div>
+                        <div class="audio-wave">
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                        </div>
+                        <div>0:23</div>
                     </div>
                     
                     <!-- Landmark in bottom area -->
                     <div style="position: absolute; bottom: 15%; left: 15%; z-index: 3;">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                            <rect width="40" height="40" rx="8" fill="#0cc0df" fill-opacity="0.2"/>
-                            <path d="M20 8L28 18H12L20 8Z" fill="#0cc0df"/>
-                            <rect x="14" y="18" width="12" height="14" fill="#0cc0df"/>
+                            <rect width="40" height="40" rx="8" fill="#2ECC71" fill-opacity="0.2"/>
+                            <path d="M20 8L28 18H12L20 8Z" fill="#2ECC71"/>
+                            <rect x="14" y="18" width="12" height="14" fill="#2ECC71"/>
                         </svg>
+                    </div>
+                    
+                    <!-- Nearby Users Panel -->
+                    <div class="nearby-panel" id="nearbyPanel">
+                        <div class="nearby-header">
+                            <div class="nearby-title">Nearby Hikers</div>
+                            <div class="nearby-close" onclick="toggleNearbyUsers()">✕</div>
+                        </div>
+                        <div class="nearby-users">
+                            <div class="nearby-user">
+                                <div class="nearby-avatar" style="border-color: var(--group-runners);">
+                                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                </div>
+                                <div class="nearby-info">
+                                    <div class="nearby-name">Emma Johnson</div>
+                                    <div class="nearby-activity">
+                                        <div class="activity-indicator"></div>
+                                        Running • 5 min ago
+                                    </div>
+                                </div>
+                                <div class="nearby-distance">120m</div>
+                                <div class="nearby-actions">
+                                    <div class="nearby-action action-chat">💬</div>
+                                    <div class="nearby-action action-join">👋</div>
+                                </div>
+                            </div>
+                            <div class="nearby-user">
+                                <div class="nearby-avatar" style="border-color: var(--group-cyclists);">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                </div>
+                                <div class="nearby-info">
+                                    <div class="nearby-name">Sophia Chen</div>
+                                    <div class="nearby-activity">
+                                        <div class="activity-indicator"></div>
+                                        Cycling • 3 min ago
+                                    </div>
+                                </div>
+                                <div class="nearby-distance">200m</div>
+                                <div class="nearby-actions">
+                                    <div class="nearby-action action-chat">💬</div>
+                                    <div class="nearby-action action-join">👋</div>
+                                </div>
+                            </div>
+                            <div class="nearby-user">
+                                <div class="nearby-avatar" style="border-color: var(--group-hikers);">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                </div>
+                                <div class="nearby-info">
+                                    <div class="nearby-name">David Kim</div>
+                                    <div class="nearby-activity">
+                                        <div class="activity-indicator"></div>
+                                        Walking • Just now
+                                    </div>
+                                </div>
+                                <div class="nearby-distance">250m</div>
+                                <div class="nearby-actions">
+                                    <div class="nearby-action action-chat">💬</div>
+                                    <div class="nearby-action action-join">👋</div>
+                                </div>
+                            </div>
+                            <div class="nearby-user">
+                                <div class="nearby-avatar" style="border-color: var(--group-cyclists);">
+                                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                </div>
+                                <div class="nearby-info">
+                                    <div class="nearby-name">Michael Wong</div>
+                                    <div class="nearby-activity">
+                                        <div class="activity-indicator"></div>
+                                        Cycling • 7 min ago
+                                    </div>
+                                </div>
+                                <div class="nearby-distance">350m</div>
+                                <div class="nearby-actions">
+                                    <div class="nearby-action action-chat">💬</div>
+                                    <div class="nearby-action action-join">👋</div>
+                                </div>
+                            </div>
+                            <div class="nearby-user">
+                                <div class="nearby-avatar" style="border-color: var(--group-cafe);">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                </div>
+                                <div class="nearby-info">
+                                    <div class="nearby-name">Lisa Park</div>
+                                    <div class="nearby-activity">
+                                        <div class="activity-indicator"></div>
+                                        Walking • 10 min ago
+                                    </div>
+                                </div>
+                                <div class="nearby-distance">450m</div>
+                                <div class="nearby-actions">
+                                    <div class="nearby-action action-chat">💬</div>
+                                    <div class="nearby-action action-join">👋</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Virtual Hike Panel -->
+                    <div class="virtual-hike-panel" id="virtualHikePanel">
+                        <div class="virtual-header">
+                            <div class="virtual-icon">🚶</div>
+                            <div class="virtual-title">Virtual Hiking</div>
+                        </div>
+                        <div class="virtual-stats">
+                            <div class="virtual-stat">
+                                <div class="stat-value">3.2 km</div>
+                                <div class="stat-label">Distance</div>
+                            </div>
+                            <div class="virtual-stat">
+                                <div class="stat-value">35 min</div>
+                                <div class="stat-label">Duration</div>
+                            </div>
+                            <div class="virtual-stat">
+                                <div class="stat-value">4210</div>
+                                <div class="stat-label">Steps</div>
+                            </div>
+                        </div>
+                        <div class="virtual-progress">
+                            <div class="progress-header">
+                                <div class="progress-label">Route Progress</div>
+                                <div class="progress-info">3.2 / 5.5 km (58%)</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 58%;"></div>
+                            </div>
+                        </div>
+                        <div class="virtual-participants">
+                            <div class="virtual-participant">
+                                <div class="participant-avatar" style="border-color: var(--group-hikers);">
+                                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                    <div class="participant-status status-active"></div>
+                                </div>
+                                <div class="participant-name">You</div>
+                            </div>
+                            <div class="virtual-participant">
+                                <div class="participant-avatar" style="border-color: var(--group-runners);">
+                                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                    <div class="participant-status status-active"></div>
+                                </div>
+                                <div class="participant-name">Emma</div>
+                            </div>
+                            <div class="virtual-participant">
+                                <div class="participant-avatar" style="border-color: var(--group-cyclists);">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                    <div class="participant-status status-paused"></div>
+                                </div>
+                                <div class="participant-name">Sophia</div>
+                            </div>
+                            <div class="virtual-participant">
+                                <div class="participant-avatar" style="border-color: var(--group-hikers);">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                                    <div class="participant-status status-active"></div>
+                                </div>
+                                <div class="participant-name">David</div>
+                            </div>
+                        </div>
+                        <div class="virtual-actions">
+                            <div class="virtual-action action-talk">🎧 Talk</div>
+                            <div class="virtual-action action-leave" onclick="toggleVirtualHike()">Leave</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Circle Mode Panel -->
+                    <div class="circle-panel" id="circlePanel">
+                        <div class="circle-header">
+                            <div class="circle-title">Circle Mode</div>
+                            <div class="nearby-close" onclick="toggleCirclePanel()">✕</div>
+                        </div>
+                        <div class="circle-tabs">
+                            <div class="circle-tab active">All Circles</div>
+                            <div class="circle-tab">Running Clubs</div>
+                            <div class="circle-tab">Cycling Groups</div>
+                            <div class="circle-tab">City Explorers</div>
+                            <div class="circle-tab">Corporate</div>
+                            <div class="circle-tab">Café Hoppers</div>
+                        </div>
+                        <div class="circle-content">
+                            <div class="circle-item">
+                                <div class="circle-icon" style="background-color: var(--group-runners);">🏃</div>
+                                <div class="circle-info">
+                                    <div class="circle-name">Morning Runners Club</div>
+                                    <div class="circle-details">
+                                        <div class="circle-members">👥 42 members</div>
+                                        <div>•</div>
+                                        <div>🏆 3 active challenges</div>
+                                    </div>
+                                </div>
+                                <div class="circle-action">Join</div>
+                            </div>
+                            <div class="circle-item">
+                                <div class="circle-icon" style="background-color: var(--group-cyclists);">🚴</div>
+                                <div class="circle-info">
+                                    <div class="circle-name">City Cyclists</div>
+                                    <div class="circle-details">
+                                        <div class="circle-members">👥 68 members</div>
+                                        <div>•</div>
+                                        <div>🏆 2 active challenges</div>
+                                    </div>
+                                </div>
+                                <div class="circle-action">Join</div>
+                            </div>
+                            <div class="circle-item">
+                                <div class="circle-icon" style="background-color: var(--group-photographers);">🏙️</div>
+                                <div class="circle-info">
+                                    <div class="circle-name">Urban Photographers</div>
+                                    <div class="circle-details">
+                                        <div class="circle-members">👥 35 members</div>
+                                        <div>•</div>
+                                        <div>🏆 1 active challenge</div>
+                                    </div>
+                                </div>
+                                <div class="circle-action">Join</div>
+                            </div>
+                            <div class="circle-item">
+                                <div class="circle-icon" style="background-color: var(--group-hikers);">💼</div>
+                                <div class="circle-info">
+                                    <div class="circle-name">TechCorp Wellness</div>
+                                    <div class="circle-details">
+                                        <div class="circle-members">👥 87 members</div>
+                                        <div>•</div>
+                                        <div>🏆 4 active challenges</div>
+                                    </div>
+                                </div>
+                                <div class="circle-action">Join</div>
+                            </div>
+                            <div class="circle-item">
+                                <div class="circle-icon" style="background-color: var(--group-cafe);">☕</div>
+                                <div class="circle-info">
+                                    <div class="circle-name">Café & Bookstore Explorers</div>
+                                    <div class="circle-details">
+                                        <div class="circle-members">👥 53 members</div>
+                                        <div>•</div>
+                                        <div>🏆 2 active challenges</div>
+                                    </div>
+                                </div>
+                                <div class="circle-action">Join</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1562,16 +2850,17 @@
                             <div class="stat-label">5-min walking</div>
                         </div>
                         <div class="stat-block">
-                            <div class="stat-amount" style="color: #23b5b5;">#147</div>
+                            <div class="stat-amount" style="color: var(--primary);">#147</div>
                             <div class="stat-label">Rank</div>
                         </div>
                     </div>
                     
-                    <!-- Map Input Area -->
+                    <!-- Map Input Area - Enhanced for Social Sharing -->
                     <div class="map-input-container">
                         <input type="text" class="map-input-field" placeholder="Share your thoughts on the map...">
-                        <div class="map-send-btn">
-                            <i>↑</i>
+                        <div class="map-input-actions">
+                            <div class="map-input-action map-audio-btn">🎤</div>
+                            <div class="map-input-action map-send-btn">↑</div>
                         </div>
                     </div>
                 </div>
@@ -1586,9 +2875,9 @@
                         <div class="tab-icon">🏆</div>
                         <div>Event</div>
                     </div>
-                    <div class="tab" onclick="switchTab('meetups-page')">
-                        <div class="tab-icon">👥</div>
-                        <div>Group</div>
+                    <div class="tab" onclick="switchTab('friends-page')">
+                        <div class="tab-icon">👫</div>
+                        <div>Friends</div>
                     </div>
                     <div class="tab" onclick="switchTab('routes-page')">
                         <div class="tab-icon">🧠</div>
@@ -1627,7 +2916,10 @@
                             <div class="rank-item">
                                 <div class="rank-position top-1">1</div>
                                 <div class="rank-info">
-                                    <div class="rank-name">Alex Thompson</div>
+                                    <div class="rank-name">
+                                        Alex Thompson
+                                        <span class="rank-group runners">Runners</span>
+                                    </div>
                                     <div class="rank-stats">12,560 steps</div>
                                 </div>
                                 <div class="rank-score">9.8 km</div>
@@ -1636,7 +2928,10 @@
                             <div class="rank-item">
                                 <div class="rank-position top-2">2</div>
                                 <div class="rank-info">
-                                    <div class="rank-name">Sarah Wong</div>
+                                    <div class="rank-name">
+                                        Sarah Wong
+                                        <span class="rank-group photographers">Photographers</span>
+                                    </div>
                                     <div class="rank-stats">12,230 steps</div>
                                 </div>
                                 <div class="rank-score">9.5 km</div>
@@ -1645,7 +2940,10 @@
                             <div class="rank-item">
                                 <div class="rank-position top-3">3</div>
                                 <div class="rank-info">
-                                    <div class="rank-name">Michael Chen</div>
+                                    <div class="rank-name">
+                                        Michael Chen
+                                        <span class="rank-group cyclists">Cyclists</span>
+                                    </div>
                                     <div class="rank-stats">11,980 steps</div>
                                 </div>
                                 <div class="rank-score">9.3 km</div>
@@ -1656,7 +2954,10 @@
                             <div class="rank-item you">
                                 <div class="rank-position">147</div>
                                 <div class="rank-info">
-                                    <div class="rank-name">You</div>
+                                    <div class="rank-name">
+                                        You
+                                        <span class="rank-group hikers">Hikers</span>
+                                    </div>
                                     <div class="rank-stats">6,740 steps</div>
                                 </div>
                                 <div class="rank-score">5.2 km</div>
@@ -1737,7 +3038,7 @@
                         </div>
                         
                         <div class="upcoming-card">
-                            <div class="upcoming-image" style="background-color: rgba(22, 119, 255, 0.3); color: #1677ff;">
+                            <div class="upcoming-image" style="background-color: rgba(52, 152, 219, 0.2); color: var(--group-cyclists);">
                                 <div>A</div>
                             </div>
                             <div class="event-content">
@@ -1765,9 +3066,9 @@
                         <div class="tab-icon">🏆</div>
                         <div>Event</div>
                     </div>
-                    <div class="tab" onclick="switchTab('meetups-page')">
-                        <div class="tab-icon">👥</div>
-                        <div>Group</div>
+                    <div class="tab" onclick="switchTab('friends-page')">
+                        <div class="tab-icon">👫</div>
+                        <div>Friends</div>
                     </div>
                     <div class="tab" onclick="switchTab('routes-page')">
                         <div class="tab-icon">🧠</div>
@@ -1780,120 +3081,162 @@
                 </div>
             </div>
             
-            <!-- Meetups Page -->
-            <div class="page meetups-page" id="meetups-page">
+            <!-- Friends Page -->
+            <div class="page friends-page" id="friends-page">
                 <!-- Social Hiking Header -->
                 <div class="hiking-header">
                     <div class="header-left">
-                        <div class="header-logo">👥</div>
+                        <div class="header-logo">👫</div>
                         <div class="header-text">
-                            <div class="header-title">Hiking Meetups</div>
-                            <div class="header-subtitle">Join Groups & Challenges</div>
+                            <div class="header-title">Friends & Groups</div>
+                            <div class="header-subtitle">Connect with your hiking buddies</div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Location Bar -->
-                <div class="location-bar">
-                    <div class="location-info" style="flex: 1;">
-                        <div class="location-icon">🔍</div>
-                        <div class="location-text">Search hiking groups and challenges...</div>
+                <!-- Friends Content -->
+                <div class="friends-content">
+                    <div class="friends-search">
+                        <div class="friends-search-icon">🔍</div>
+                        <input type="text" class="friends-search-input" placeholder="Search friends...">
                     </div>
-                </div>
-                
-                <!-- Meetups Content -->
-                <div class="meetups-content">
-                    <div class="section-title">Upcoming Hiking Meetups</div>
-                    <div class="events-scroll">
-                        <div class="event-card">
-                            <div class="event-image">
-                                🌅
-                                <div class="event-badge">Tomorrow</div>
+                    
+                    <div class="friend-section">
+                        <div class="section-title">My Groups</div>
+                        <div class="group-chat-list">
+                            <div class="group-chat-card">
+                                <div class="group-avatar hikers">🥾</div>
+                                <div class="group-info">
+                                    <div class="group-name">Urban Hikers Club</div>
+                                    <div class="group-status">👥 26 members • 🟢 12 online</div>
+                                </div>
+                                <div class="group-action">💬</div>
                             </div>
-                            <div class="event-content">
-                                <div class="event-title">Sunset Coastal Walk</div>
-                                <div class="event-info">
-                                    <div>👥 27 people</div>
-                                    <div>📍 Seaside Park</div>
+                            
+                            <div class="group-chat-card">
+                                <div class="group-avatar runners">🏃</div>
+                                <div class="group-info">
+                                    <div class="group-name">Morning Runners</div>
+                                    <div class="group-status">👥 42 members • 🟢 8 online</div>
                                 </div>
-                                <div class="event-description">
-                                    Join our relaxing evening coastal walk with stunning sunset views.
-                                </div>
-                                <button class="join-button">Join Group</button>
+                                <div class="group-action">💬</div>
                             </div>
-                        </div>
-                        
-                        <div class="event-card">
-                            <div class="event-image" style="background-color: #08979d;">
-                                🏙️
-                                <div class="event-badge">Saturday</div>
-                            </div>
-                            <div class="event-content">
-                                <div class="event-title">Urban Architecture Tour</div>
-                                <div class="event-info">
-                                    <div>👥 18 people</div>
-                                    <div>📍 CBD Area</div>
+                            
+                            <div class="group-chat-card">
+                                <div class="group-avatar cafe">☕</div>
+                                <div class="group-info">
+                                    <div class="group-name">Café Explorers</div>
+                                    <div class="group-status">👥 18 members • 🟢 5 online</div>
                                 </div>
-                                <div class="event-description">
-                                    Explore the city's most iconic buildings with our architecture expert.
-                                </div>
-                                <button class="join-button">Join Group</button>
+                                <div class="group-action">💬</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="section-title">Active Challenges</div>
-                    <div class="challenges-list">
-                        <div class="challenge-card">
-                            <div class="challenge-icon">🏆</div>
-                            <div class="challenge-content">
-                                <div class="challenge-title">30-Day Step Challenge</div>
-                                <div class="challenge-stats">
-                                    <div>⏱️ 12 days left</div>
-                                    <div>👥 124 participants</div>
+                    <div class="section-title">
+                        Online Friends
+                        <span class="section-action">View All</span>
+                    </div>
+                    <div class="friends-list">
+                        <div class="friend-card">
+                            <div class="friend-avatar runners">
+                                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">
+                                    Emma Johnson
+                                    <span class="friend-group runners">Runners</span>
                                 </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 60%;"></div>
+                                <div class="friend-status">
+                                    <span class="status-dot online"></span>
+                                    Running in Downtown Park • 3 min ago
                                 </div>
-                                <div class="badges-row">
-                                    <div class="badge earned">🥉</div>
-                                    <div class="badge earned">🔥</div>
-                                    <div class="badge locked">🥈</div>
-                                    <div class="badge locked">🥇</div>
-                                </div>
+                            </div>
+                            <div class="friend-actions">
+                                <div class="friend-action">💬</div>
                             </div>
                         </div>
                         
-                        <div class="challenge-card">
-                            <div class="challenge-icon">🌍</div>
-                            <div class="challenge-content">
-                                <div class="challenge-title">City Landmarks Explorer</div>
-                                <div class="challenge-stats">
-                                    <div>🏛️ 8/15 landmarks</div>
-                                    <div>👥 87 participants</div>
+                        <div class="friend-card">
+                            <div class="friend-avatar cyclists">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">
+                                    Sophia Chen
+                                    <span class="friend-group cyclists">Cyclists</span>
                                 </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 53%;"></div>
+                                <div class="friend-status">
+                                    <span class="status-dot online"></span>
+                                    Cycling on Riverside Route • Just now
                                 </div>
-                                <div class="badges-row">
-                                    <div class="badge earned">🏛️</div>
-                                    <div class="badge earned">🌆</div>
-                                    <div class="badge locked">🌟</div>
-                                    <div class="badge locked">🎖️</div>
+                            </div>
+                            <div class="friend-actions">
+                                <div class="friend-action">💬</div>
+                            </div>
+                        </div>
+                        
+                        <div class="friend-card">
+                            <div class="friend-avatar hikers">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">
+                                    David Kim
+                                    <span class="friend-group hikers">Hikers</span>
                                 </div>
+                                <div class="friend-status">
+                                    <span class="status-dot online"></span>
+                                    Walking in Central Park • 5 min ago
+                                </div>
+                            </div>
+                            <div class="friend-actions">
+                                <div class="friend-action">💬</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="section-title">Create Your Own</div>
-                    <div class="challenge-card">
-                        <div class="challenge-icon">➕</div>
-                        <div class="challenge-content">
-                            <div class="challenge-title">Start a Hiking Group</div>
-                            <div style="color: rgba(255,255,255,0.7); font-size: 12px; margin: 5px 0 10px;">
-                                Create your own hiking event or challenge. Invite friends or open it to the public.
+                    <div class="section-title" style="margin-top: 20px;">
+                        Recent Friends
+                        <span class="section-action">View All</span>
+                    </div>
+                    <div class="friends-list">
+                        <div class="friend-card">
+                            <div class="friend-avatar photographers">
+                                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
                             </div>
-                            <button class="join-button">Create Now</button>
+                            <div class="friend-info">
+                                <div class="friend-name">
+                                    Michael Wong
+                                    <span class="friend-group photographers">Photographers</span>
+                                </div>
+                                <div class="friend-status">
+                                    <span class="status-dot offline"></span>
+                                    Last seen 35 min ago
+                                </div>
+                            </div>
+                            <div class="friend-actions">
+                                <div class="friend-action">💬</div>
+                            </div>
+                        </div>
+                        
+                        <div class="friend-card">
+                            <div class="friend-avatar cafe">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="">
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">
+                                    Lisa Park
+                                    <span class="friend-group cafe">Café Hoppers</span>
+                                </div>
+                                <div class="friend-status">
+                                    <span class="status-dot offline"></span>
+                                    Last seen 1 hour ago
+                                </div>
+                            </div>
+                            <div class="friend-actions">
+                                <div class="friend-action">💬</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1908,9 +3251,9 @@
                         <div class="tab-icon">🏆</div>
                         <div>Event</div>
                     </div>
-                    <div class="tab active" onclick="switchTab('meetups-page')">
-                        <div class="tab-icon">👥</div>
-                        <div>Group</div>
+                    <div class="tab active" onclick="switchTab('friends-page')">
+                        <div class="tab-icon">👫</div>
+                        <div>Friends</div>
                     </div>
                     <div class="tab" onclick="switchTab('routes-page')">
                         <div class="tab-icon">🧠</div>
@@ -2036,9 +3379,9 @@
                         <div class="tab-icon">🏆</div>
                         <div>Event</div>
                     </div>
-                    <div class="tab" onclick="switchTab('meetups-page')">
-                        <div class="tab-icon">👥</div>
-                        <div>Group</div>
+                    <div class="tab" onclick="switchTab('friends-page')">
+                        <div class="tab-icon">👫</div>
+                        <div>Friends</div>
                     </div>
                     <div class="tab active" onclick="switchTab('routes-page')">
                         <div class="tab-icon">🧠</div>
@@ -2096,15 +3439,15 @@
                                     <div class="achievement-name">Step Master</div>
                                 </div>
                                 <div class="achievement">
-                                    <div class="achievement-badge" style="background-color: rgba(35, 181, 181, 0.2); color: #23b5b5;">🌳</div>
+                                    <div class="achievement-badge" style="background-color: rgba(46, 204, 113, 0.2); color: var(--primary);">🌳</div>
                                     <div class="achievement-name">Park Explorer</div>
                                 </div>
                                 <div class="achievement">
-                                    <div class="achievement-badge" style="background-color: rgba(245, 34, 45, 0.2); color: #f5222d;">🔥</div>
+                                    <div class="achievement-badge" style="background-color: rgba(231, 76, 60, 0.2); color: var(--group-runners);">🔥</div>
                                     <div class="achievement-name">7-Day Streak</div>
                                 </div>
                                 <div class="achievement">
-                                    <div class="achievement-badge" style="background-color: rgba(255, 122, 69, 0.2); color: #ff7a45;">☕</div>
+                                    <div class="achievement-badge" style="background-color: rgba(243, 156, 18, 0.2); color: var(--group-cafe);">☕</div>
                                     <div class="achievement-name">Cafe Hopper</div>
                                 </div>
                             </div>
@@ -2139,7 +3482,7 @@
                                 </div>
                                 <div class="settings-item">
                                     <div class="settings-icon">📤</div>
-                                    <div class="settings-name" style="color: #f5222d;">Log Out</div>
+                                    <div class="settings-name" style="color: #E74C3C;">Log Out</div>
                                     <div class="settings-arrow">→</div>
                                 </div>
                             </div>
@@ -2157,9 +3500,9 @@
                         <div class="tab-icon">🏆</div>
                         <div>Event</div>
                     </div>
-                    <div class="tab" onclick="switchTab('meetups-page')">
-                        <div class="tab-icon">👥</div>
-                        <div>Group</div>
+                    <div class="tab" onclick="switchTab('friends-page')">
+                        <div class="tab-icon">👫</div>
+                        <div>Friends</div>
                     </div>
                     <div class="tab" onclick="switchTab('routes-page')">
                         <div class="tab-icon">🧠</div>
@@ -2199,6 +3542,32 @@
         
         function showProfile() {
             switchTab('profile-page');
+        }
+        
+        function toggleNearbyUsers() {
+            const panel = document.getElementById('nearbyPanel');
+            panel.classList.toggle('show');
+        }
+        
+        function toggleVirtualHike() {
+            const panel = document.getElementById('virtualHikePanel');
+            panel.classList.toggle('show');
+        }
+        
+        function toggleCirclePanel() {
+            const panel = document.getElementById('circlePanel');
+            panel.classList.toggle('show');
+        }
+        
+        function toggleAudioMode() {
+            // Toggle audio mode functionality
+            const audioBtn = document.querySelector('.map-tool:nth-child(3)');
+            audioBtn.classList.toggle('active');
+        }
+        
+        function playAudio() {
+            // Audio playback functionality
+            alert('Playing audio message...');
         }
     </script>
 </body>
