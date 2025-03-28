@@ -1,94 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Competitive Radar Chart</title>
-    <!-- 添加错误处理 -->
-    <script>
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
-            document.body.innerHTML += '<div style="color: red;">Error: ' + msg + '</div>';
-            return false;
-        };
-    </script>
-    <!-- 按顺序加载依赖 -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Market Comparison</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab {
+      background: #e0e0e0;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .tab.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .matrix {
+      overflow-x: auto;
+      max-width: 100%;
+      margin-bottom: 40px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    .category-section {
+      display: flex;
+      flex-direction: column;
+      margin-top: 40px;
+    }
+    
+    @media (min-width: 992px) {
+      .category-section {
+        flex-direction: row;
+      }
+    }
+    
+    .radar-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    #radarChart {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .category-details {
+      flex: 1;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    @media (min-width: 992px) {
+      .category-details {
+        margin-left: 20px;
+        margin-top: 0;
+      }
+    }
+    
+    .detail-row {
+      margin-bottom: 15px;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .weakness-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #dc3545;
+    }
+    
+    .detail-content {
+      margin-left: 0;
+    }
+    
+    .weakness-content {
+      margin-left: 0;
+      background-color: #fff5f5;
+      padding: 10px;
+      border-left: 3px solid #dc3545;
+      color: #dc3545;
+    }
+    
+    .category-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div id="root">Loading...</div>
-    <script type="text/babel">
-        // 添加调试信息
-        console.log('Script started');
-        
-        try {
-            const { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } = Recharts;
-            console.log('Recharts components loaded');
+  <h1>Travel Platform Market Comparison Matrix</h1>
 
-            const data = {
-                "Online Travel Agencies": { exploration: 2, social: 1, gamification: 0, ai: 1, ugc: 2, monetization: 5 },
-                "Local Travel Platforms": { exploration: 4, social: 4, gamification: 1, ai: 2, ugc: 4, monetization: 4 },
-                "Outdoor & Hiking Apps": { exploration: 5, social: 2, gamification: 1, ai: 1, ugc: 3, monetization: 2 },
-                "Social & Group Travel": { exploration: 3, social: 5, gamification: 2, ai: 1, ugc: 5, monetization: 3 },
-                "Short-Distance Travel Apps (Qingye)": { exploration: 5, social: 5, gamification: 4, ai: 4, ugc: 5, monetization: 5 },
-            };
+  <div class="tabs">
+    <div class="tab active" onclick="changeTab('all')">All</div>
+    <div class="tab" onclick="changeTab('OTA')">Online Travel Agencies (OTA)</div>
+    <div class="tab" onclick="changeTab('Local')">Local Travel & Experience Discovery</div>
+    <div class="tab" onclick="changeTab('Outdoor')">Outdoor & Hiking Apps</div>
+    <div class="tab" onclick="changeTab('Social')">Social & Group Travel Platforms</div>
+    <div class="tab" onclick="changeTab('Short')">Short-Distance Travel & Adventure Booking</div>
+  </div>
 
-            const categories = Object.keys(data);
-            const metrics = ["exploration", "social", "gamification", "ai", "ugc", "monetization"];
+  <div class="matrix">
+    <table id="matrixTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Representative Platforms</th>
+          <th>Interaction Frequency</th>
+          <th>Social Element</th>
+          <th>Real-time Features</th>
+          <th>Content Discovery</th>
+          <th>Monetization</th>
+          <th>Planning Capability</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-category="OTA">
+          <td>OTA</td>
+          <td>Ctrip, Fliggy, Qunar</td>
+          <td>★★☆☆☆</td>
+          <td>★☆☆☆☆</td>
+          <td>★☆☆☆☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★★★☆</td>
+          <td>★★★☆☆</td>
+        </tr>
+        <tr data-category="Local">
+          <td>Local Exploration</td>
+          <td>Xiaohongshu, Meituan, Mafengwo</td>
+          <td>★★★☆☆</td>
+          <td>★★★★☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★★★★</td>
+          <td>★★★☆☆</td>
+          <td>★★☆☆☆</td>
+        </tr>
+        <tr data-category="Outdoor">
+          <td>Outdoor</td>
+          <td>Keep, Xingzhe, AllTrails</td>
+          <td>★★★★☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★★★☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★★☆☆</td>
+          <td>★☆☆☆☆</td>
+        </tr>
+        <tr data-category="Social">
+          <td>Social Travel</td>
+          <td>Meetup, Couchsurfing, Douyin Travel</td>
+          <td>★★★★☆</td>
+          <td>★★★★★</td>
+          <td>★★★★☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★☆☆☆</td>
+        </tr>
+        <tr data-category="Short">
+          <td>Short-Distance Travel</td>
+          <td>Klook, Fliggy Local, GetYourGuide</td>
+          <td>★★☆☆☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★☆☆☆</td>
+          <td>★★★★☆</td>
+          <td>★★☆☆☆</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-            function CompetitiveRadarChart() {
-                console.log('Rendering CompetitiveRadarChart');
-                const [selectedCategory, setSelectedCategory] = React.useState("Short-Distance Travel Apps (Qingye)");
+  <div id="category-section" class="category-section">
+    <div class="radar-container">
+      <h2 style="text-align: center; margin-bottom: 20px;">Competitive Landscape</h2>
+      <canvas id="radarChart" width="400" height="400"></canvas>
+    </div>
+    
+    <div class="category-details" id="categoryDetails">
+      <h3 class="category-title" id="categoryTitle">Online Travel Agencies (OTA)</h3>
+      
+      <div class="detail-row">
+        <div class="detail-label">Key Players</div>
+        <div class="detail-content" id="keyPlayers">Ctrip, Fliggy, Qunar</div>
+      </div>
+      
+      <div class="detail-row">
+        <div class="detail-label">Core Purpose</div>
+        <div class="detail-content" id="corePurpose">Booking hotels, flights, and transportation.</div>
+      </div>
+      
+      <div class="detail-row">
+        <div class="detail-label">Engagement Model</div>
+        <div class="detail-content" id="engagementModel">Transactional -- Users engage only when planning trips.</div>
+      </div>
+      
+      <div class="detail-row">
+        <div class="detail-label">Social Features</div>
+        <div class="detail-content" id="socialFeatures">Weak -- Mostly reviews & star ratings.</div>
+      </div>
+      
+      <div class="detail-row">
+        <div class="detail-label">Monetization</div>
+        <div class="detail-content" id="monetization">Booking commissions from hotels, flights, and attractions.</div>
+      </div>
+      
+      <div class="detail-row" id="weaknessRow">
+        <div class="weakness-label">Weakness</div>
+        <div class="weakness-content" id="weakness">Not focused on short-distance travel, lacks real-time social engagement.</div>
+      </div>
+    </div>
+  </div>
 
-                const chartData = metrics.map((metric) => ({
-                    metric,
-                    value: data[selectedCategory][metric],
-                }));
-
-                return (
-                    <div className="flex flex-col items-center p-4">
-                        <h2 className="text-lg font-bold mb-4">Competitive Landscape Radar Chart</h2>
-                        <div className="flex flex-wrap justify-center gap-2 mb-4">
-                            {categories.map((category) => (
-                                <button
-                                    key={category}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 py-2 rounded-md ${
-                                        selectedCategory === category ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
-                                    }`}
-                                >
-                                    {category}
-                                </button>
-                            ))}
-                        </div>
-                        <RadarChart cx={250} cy={200} outerRadius={150} width={500} height={400} data={chartData}>
-                            <PolarGrid />
-                            <PolarAngleAxis dataKey="metric" />
-                            <PolarRadiusAxis angle={30} domain={[0, 5]} />
-                            <Radar name={selectedCategory} dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-                            <Legend />
-                        </RadarChart>
-                    </div>
-                );
-            }
-
-            // 使用严格模式渲染
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(
-                <React.StrictMode>
-                    <CompetitiveRadarChart />
-                </React.StrictMode>
-            );
-            
-            console.log('Render completed');
-        } catch (error) {
-            console.error('Error in script:', error);
-            document.body.innerHTML += '<div style="color: red;">Error: ' + error.message + '</div>';
+  <script>
+    // Data for categories
+    const categoryData = {
+      "OTA": {
+        metrics: {
+          interaction: 2,
+          social: 1, 
+          realtime: 1,
+          content: 2,
+          monetization: 4,
+          planning: 3
+        },
+        details: {
+          keyPlayers: "Ctrip, Fliggy, Qunar",
+          corePurpose: "Booking hotels, flights, and transportation.",
+          engagementModel: "Transactional -- Users engage only when planning trips.",
+          socialFeatures: "Weak -- Mostly reviews & star ratings.",
+          monetization: "Booking commissions from hotels, flights, and attractions.",
+          weakness: "Not focused on short-distance travel, lacks real-time social engagement."
         }
-    </script>
+      },
+      "Local": {
+        metrics: {
+          interaction: 3,
+          social: 4,
+          realtime: 2,
+          content: 5,
+          monetization: 3,
+          planning: 2
+        },
+        details: {
+          keyPlayers: "Meituan, Xiaohongshu, Mafengwo",
+          corePurpose: "Content-driven discovery of travel spots & local experiences.",
+          engagementModel: "Content-based -- Users browse, save posts, and sometimes book.",
+          socialFeatures: "Strong -- Comments, likes, shares, influencer-driven.",
+          monetization: "Ads, influencer marketing, affiliate commissions.",
+          weakness: "Passive content consumption, lacks real-time travel features & booking integration."
+        }
+      },
+      "Outdoor": {
+        metrics: {
+          interaction: 4,
+          social: 2,
+          realtime: 4,
+          content: 2,
+          monetization: 3,
+          planning: 1
+        },
+        details: {
+          keyPlayers: "Xingzhe, Keep, AllTrails, Komoot",
+          corePurpose: "Fitness-focused -- Route tracking, step counting, hiking logs.",
+          engagementModel: "Utility-driven -- Users engage during outdoor activities.",
+          socialFeatures: "Minimal -- Some leaderboards, community challenges.",
+          monetization: "Subscriptions for premium maps, fitness tracking tools.",
+          weakness: "Not built for social travel, lacks real-world discovery & group planning features."
+        }
+      },
+      "Social": {
+        metrics: {
+          interaction: 4,
+          social: 5,
+          realtime: 4,
+          content: 2,
+          monetization: 2,
+          planning: 2
+        },
+        details: {
+          keyPlayers: "Douyin Travel, Meetup, Couchsurfing",
+          corePurpose: "Event discovery, connecting travelers.",
+          engagementModel: "Social-based -- Users join groups, RSVP to meetups.",
+          socialFeatures: "Core social experience -- DMs, group chats, events.",
+          monetization: "Ads, event sponsorships, premium memberships.",
+          weakness: "Event-based, lacks structured travel planning & monetization opportunities."
+        }
+      },
+      "Short": {
+        metrics: {
+          interaction: 2,
+          social: 2,
+          realtime: 2,
+          content: 2,
+          monetization: 4,
+          planning: 2
+        },
+        details: {
+          keyPlayers: "Klook, GetYourGuide, Feizhu Local",
+          corePurpose: "Booking day trips, activities, guided tours.",
+          engagementModel: "Transactional -- Users book specific experiences.",
+          socialFeatures: "Moderate -- Review system, some user-generated content.",
+          monetization: "Booking commissions from tour operators.",
+          weakness: "Lacks real-time exploration & organic social engagement."
+        }
+      }
+    };
+    
+    // Map category codes to display names
+    const categoryDisplayNames = {
+      "all": "All Categories",
+      "OTA": "Online Travel Agencies (OTA)",
+      "Local": "Local Travel & Experience Discovery",
+      "Outdoor": "Outdoor & Hiking Apps",
+      "Social": "Social & Group Travel Platforms", 
+      "Short": "Short-Distance Travel & Adventure Booking"
+    };
+    
+    // Metrics display names
+    const metricLabels = {
+      "interaction": "Interaction Frequency",
+      "social": "Social Element",
+      "realtime": "Real-time Features",
+      "content": "Content Discovery",
+      "monetization": "Monetization",
+      "planning": "Planning Capability"
+    };
+    
+    // Change tab function that handles both table and radar chart
+    function changeTab(category) {
+      // Update tabs
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Filter table rows
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        if (category === 'all') {
+          row.style.display = '';
+        } else {
+          row.style.display = row.dataset.category === category ? '' : 'none';
+        }
+      });
+      
+      // Show/hide category section based on selection
+      if (category === 'all') {
+        document.getElementById('category-section').style.display = 'none';
+      } else {
+        document.getElementById('category-section').style.display = '';
+        updateCategoryDetails(category);
+        drawRadarChart(category);
+      }
+    }
+    
+    // Draw radar chart
+    function drawRadarChart(category) {
+      const canvas = document.getElementById('radarChart');
+      const ctx = canvas.getContext('2d');
+      const metrics = Object.keys(metricLabels);
+      const data = categoryData[category].metrics;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Set chart properties
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const maxRadius = Math.min(centerX, centerY) * 0.8;
+      
+      // Draw radar background
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, maxRadius, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#ddd';
+      ctx.stroke();
+      
+      // Draw concentric circles
+      for (let r = 1; r <= 5; r++) {
+        const radius = maxRadius * r / 5;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#eee';
+        ctx.stroke();
+      }
+      
+      // Draw axes
+      const angleStep = (2 * Math.PI) / metrics.length;
+      let angle = -Math.PI / 2; // Start from top
+      
+      metrics.forEach((metric, i) => {
+        // Draw axis line
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        const endX = centerX + maxRadius * Math.cos(angle);
+        const endY = centerY + maxRadius * Math.sin(angle);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = '#ccc';
+        ctx.stroke();
+        
+        // Draw label
+        const labelRadius = maxRadius + 20;
+        const labelX = centerX + labelRadius * Math.cos(angle);
+        const labelY = centerY + labelRadius * Math.sin(angle);
+        
+        ctx.fillStyle = '#333';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(metricLabels[metric], labelX, labelY);
+        
+        angle += angleStep;
+      });
+      
+      // Draw data points
+      angle = -Math.PI / 2; // Reset angle
+      const dataPoints = [];
+      
+      metrics.forEach((metric, i) => {
+        const value = data[metric];
+        const normalizedValue = value / 5; // Normalize to 0-1 range
+        const pointRadius = maxRadius * normalizedValue;
+        const x = centerX + pointRadius * Math.cos(angle);
+        const y = centerY + pointRadius * Math.sin(angle);
+        
+        dataPoints.push({ x, y });
+        angle += angleStep;
+      });
+      
+      // Draw data polygon
+      ctx.beginPath();
+      ctx.moveTo(dataPoints[0].x, dataPoints[0].y);
+      
+      for (let i = 1; i < dataPoints.length; i++) {
+        ctx.lineTo(dataPoints[i].x, dataPoints[i].y);
+      }
+      
+      ctx.lineTo(dataPoints[0].x, dataPoints[0].y);
+      ctx.fillStyle = 'rgba(0, 123, 255, 0.3)';
+      ctx.fill();
+      
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(0, 123, 255, 0.8)';
+      ctx.stroke();
+      
+      // Draw data points
+      dataPoints.forEach((point, i) => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0, 123, 255, 1)';
+        ctx.fill();
+      });
+    }
+    
+    // Update category details
+    function updateCategoryDetails(category) {
+      const details = categoryData[category].details;
+      
+      document.getElementById('categoryTitle').textContent = categoryDisplayNames[category];
+      document.getElementById('keyPlayers').textContent = details.keyPlayers;
+      document.getElementById('corePurpose').textContent = details.corePurpose;
+      document.getElementById('engagementModel').textContent = details.engagementModel;
+      document.getElementById('socialFeatures').textContent = details.socialFeatures;
+      document.getElementById('monetization').textContent = details.monetization;
+      document.getElementById('weakness').textContent = details.weakness;
+    }
+    
+    // Initialize on page load
+    window.onload = function() {
+      // Initialize with "all" category
+      changeTab('all');
+      
+      // Initialize with first non-all category for the details section
+      updateCategoryDetails('OTA');
+      drawRadarChart('OTA');
+    };
+  </script>
 </body>
 </html>
