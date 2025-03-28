@@ -223,7 +223,7 @@
     </table>
   </div>
 
-  <div id="category-section" class="category-section">
+  <div id="category-section" class="category-section" style="display: none;">
     <div class="radar-container">
       <h2 style="text-align: center; margin-bottom: 20px;">Competitive Landscape</h2>
       <canvas id="radarChart" width="400" height="400"></canvas>
@@ -383,8 +383,14 @@
     function changeTab(category) {
       // Update tabs
       const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      event.target.classList.add('active');
+      tabs.forEach(tab => {
+        if (tab.innerText === categoryDisplayNames[category] || 
+            (tab.innerText === "All" && category === "all")) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
       
       // Filter table rows
       const rows = document.querySelectorAll('tbody tr');
@@ -519,12 +525,28 @@
     
     // Initialize on page load
     window.onload = function() {
-      // Initialize with "all" category
-      changeTab('all');
+      // Make sure "All" tab is active by default and details section is hidden
+      document.getElementById('category-section').style.display = 'none';
       
-      // Initialize with first non-all category for the details section
+      // Pre-load data for other categories
       updateCategoryDetails('OTA');
       drawRadarChart('OTA');
+      
+      // Make sure all rows are visible
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        row.style.display = '';
+      });
+      
+      // Make sure "All" tab is active
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        if (tab.innerText === "All") {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
     };
   </script>
 </body>
