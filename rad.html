@@ -1,50 +1,67 @@
-import React, { useState } from "react";
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Radar Chart</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } = Recharts;
 
-const data = {
-  "Online Travel Agencies": { exploration: 2, social: 1, gamification: 0, ai: 1, ugc: 2, monetization: 5 },
-  "Local Travel Platforms": { exploration: 4, social: 4, gamification: 1, ai: 2, ugc: 4, monetization: 4 },
-  "Outdoor & Hiking Apps": { exploration: 5, social: 2, gamification: 1, ai: 1, ugc: 3, monetization: 2 },
-  "Social & Group Travel": { exploration: 3, social: 5, gamification: 2, ai: 1, ugc: 5, monetization: 3 },
-  "Short-Distance Travel Apps (Qingye)": { exploration: 5, social: 5, gamification: 4, ai: 4, ugc: 5, monetization: 5 },
-};
+        const data = {
+            "Online Travel Agencies": { exploration: 2, social: 1, gamification: 0, ai: 1, ugc: 2, monetization: 5 },
+            "Local Travel Platforms": { exploration: 4, social: 4, gamification: 1, ai: 2, ugc: 4, monetization: 4 },
+            "Outdoor & Hiking Apps": { exploration: 5, social: 2, gamification: 1, ai: 1, ugc: 3, monetization: 2 },
+            "Social & Group Travel": { exploration: 3, social: 5, gamification: 2, ai: 1, ugc: 5, monetization: 3 },
+            "Short-Distance Travel Apps (Qingye)": { exploration: 5, social: 5, gamification: 4, ai: 4, ugc: 5, monetization: 5 },
+        };
 
-const categories = Object.keys(data);
-const metrics = ["exploration", "social", "gamification", "ai", "ugc", "monetization"];
+        const categories = Object.keys(data);
+        const metrics = ["exploration", "social", "gamification", "ai", "ugc", "monetization"];
 
-const CompetitiveRadarChart = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Short-Distance Travel Apps (Qingye)");
+        function CompetitiveRadarChart() {
+            const [selectedCategory, setSelectedCategory] = React.useState("Short-Distance Travel Apps (Qingye)");
 
-  const chartData = metrics.map((metric) => ({
-    metric,
-    value: data[selectedCategory][metric],
-  }));
+            const chartData = metrics.map((metric) => ({
+                metric,
+                value: data[selectedCategory][metric],
+            }));
 
-  return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-lg font-bold mb-4">Competitive Landscape Radar Chart</h2>
-      <div className="flex space-x-2 mb-4">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-md ${
-              selectedCategory === category ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-      <RadarChart cx={250} cy={200} outerRadius={150} width={500} height={400} data={chartData}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="metric" />
-        <PolarRadiusAxis angle={30} domain={[0, 5]} />
-        <Radar name={selectedCategory} dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-        <Legend />
-      </RadarChart>
-    </div>
-  );
-};
+            return (
+                <div className="flex flex-col items-center">
+                    <h2 className="text-lg font-bold mb-4">Competitive Landscape Radar Chart</h2>
+                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                        {categories.map((category) => (
+                            <button
+                                key={category}
+                                onClick={() => setSelectedCategory(category)}
+                                className={`px-4 py-2 rounded-md ${
+                                    selectedCategory === category ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                                }`}
+                            >
+                                {category}
+                            </button>
+                        ))}
+                    </div>
+                    <RadarChart cx={250} cy={200} outerRadius={150} width={500} height={400} data={chartData}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="metric" />
+                        <PolarRadiusAxis angle={30} domain={[0, 5]} />
+                        <Radar name={selectedCategory} dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                        <Legend />
+                    </RadarChart>
+                </div>
+            );
+        }
 
-export default CompetitiveRadarChart;
+        ReactDOM.render(<CompetitiveRadarChart />, document.getElementById('root'));
+    </script>
+</body>
+</html>
